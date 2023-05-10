@@ -269,82 +269,87 @@ export const CreateItem = () => {
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="name">Name: </label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={item.name}
-                    onChange={handleChange}
-                />
+            <div className="flex-parent-element">
 
-                <label htmlFor="category">Category: </label>
-                <select id="category" name="category" onChange={handleChange} >
-                    <option value="" ></option>
-                    <option value="Equities" >Equities</option>
-                    <option value="Bonds">Bonds</option>
-                    <option value="Hedge Funds">Hedge Funds</option>
-                    <option value="Cash">Cash</option>
-                    <option value="Fixed Deposits">Fixed Deposits</option>
-                    <option value="Unlisted Assets">Unlisted Assets</option>
-                    <option value="Venture Capital">Venture Capital</option>
-                    <option value="Properties">Properties</option>
-                    <option value="Mortgage">Mortgage</option>
-                    <option value="Bank Borrowings">Bank Borrowings</option>
-                </select>
-
-                <label htmlFor="notes">Notes: </label>
-                <textarea
-                    id="notes"
-                    name="notes"
-                    value={item.notes}
-                    onChange={handleChange}
-                ></textarea>
-
-                <label htmlFor="price">Price: </label>
-                <input
-                    type="number"
-                    id="price"
-                    name="price"
-                    value={item.price}
-                    onChange={handleChangePrice}
-                />
-
-                <label htmlFor="price">Current Price: </label>
-                <input
-                    id="curPrice"
-                    name="curPrice"
-                    value={item.curPrice}
-                    onChange={handleChange}
-                />
-
-                <label htmlFor="currency">Currency: </label>
-                <select id="currency" name="currency" onChange={handleChange}>
-                    {currency_list.map((curr_val) => (
-                        <option value={curr_val.code} >{curr_val.code} - {curr_val.name}</option>
-                    ))}
-                </select>
-
-                <label htmlFor="quantity">Quantity: </label>
-                <input
-                    type="number"
-                    id="quantity"
-                    name="quantity"
-                    value={item.quantity}
-                    onChange={handleChange}
-                />
-
-                <label htmlFor="date">Date: </label>
-                <input
-                    type="datetime-local"
-                    id="date"
-                    name="date"
-                    value={item.date}
-                    onChange={handleChange}
-                />
-
-                <button type="submit">Add Item</button>
-            </form>
+                <form className="flex-child-element" onSubmit={handleSubmit}>
+                    <label htmlFor="name">Name: </label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={item.name}
+                        onChange={handleChange}
+                        class="form-control"
+                    />
+                    <br></br>
+                    <label htmlFor="category">Category: </label>
+                    <select id="category" name="category" onChange={handleChange} class="form-select mt-3">
+                        <option value="" ></option>
+                        <option value="Equities" >Equities</option>
+                        <option value="Bonds">Bonds</option>
+                        <option value="Hedge Funds">Hedge Funds</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Fixed Deposits">Fixed Deposits</option>
+                        <option value="Unlisted Assets">Unlisted Assets</option>
+                        <option value="Venture Capital">Venture Capital</option>
+                        <option value="Properties">Properties</option>
+                        <option value="Mortgage">Mortgage</option>
+                        <option value="Bank Borrowings">Bank Borrowings</option>
+                    </select>
+                    <br></br>
+                    <label htmlFor="notes">Notes: </label>
+                    <textarea
+                        id="notes"
+                        name="notes"
+                        value={item.notes}
+                        onChange={handleChange}
+                        class="form-control"
+                    ></textarea>
+                    <br></br>
+                    <label htmlFor="price">Price: </label>
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        value={item.price}
+                        onChange={handleChangePrice}
+                    />
+                    <br></br>
+                    <label htmlFor="price">Current Price: </label>
+                    <input
+                        id="curPrice"
+                        name="curPrice"
+                        value={item.curPrice}
+                        onChange={handleChange}
+                    />
+                    <br></br>
+                    <label htmlFor="currency">Currency: </label>
+                    <select id="currency" name="currency" onChange={handleChange}>
+                        {currency_list.map((curr_val) => (
+                            <option value={curr_val.code} >{curr_val.code} - {curr_val.name}</option>
+                        ))}
+                    </select>
+                    <br></br>
+                    <label htmlFor="quantity">Quantity: </label>
+                    <input
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        value={item.quantity}
+                        onChange={handleChange}
+                    />
+                    <br></br>
+                    <label htmlFor="date">Date: </label>
+                    <input
+                        type="datetime-local"
+                        id="date"
+                        name="date"
+                        value={item.date}
+                        onChange={handleChange}
+                    />
+                    <br></br>
+                    <button type="submit">Add Item</button>
+                </form>
+            </div>
         </div >);
 };

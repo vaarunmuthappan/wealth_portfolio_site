@@ -81,96 +81,90 @@ export const EditItem = () => {
                     <button className="bn632-hover bn21 " onClick={back}> Back </button>
                 </div>
             </div>
+            <div >
+                <form onSubmit={handleSubmit}>
+                    <label htmlFor="name">Name: </label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={item.name}
+                        onChange={handleChange}
+                    />
+                    <br></br>
+                    <label htmlFor="category">Category: </label>
+                    <select id="category" name="category" onChange={handleChange} >
+                        <option value={item.category} >{item.category}</option>
 
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="name">Name: </label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={item.name}
-                    onChange={handleChange}
-                />
+                        {item.category === "Equities" ? '' : <option value="Equities" >Equities</option>}
+                        {item.category === "Bonds" ? '' : <option value="Bonds" >Bonds</option>}
+                        {item.category === "Hedge Funds" ? '' : <option value="Hedge Funds" >Equities</option>}
+                        {item.category === "Cash" ? '' : <option value="Cash" >Cash</option>}
+                        {item.category === "Fixed Deposits" ? '' : <option value="Fixed Deposits" >Fixed Deposits</option>}
+                        {item.category === "Unlisted Assets" ? '' : <option value="Unlisted Assets" >Unlisted Assets</option>}
+                        {item.category === "Venture Capital" ? '' : <option value="Venture Capital" >Venture Capital</option>}
+                        {item.category === "Properties" ? '' : <option value="Properties" >Properties</option>}
+                        {item.category === "Mortgage" ? '' : <option value="Mortgage" >Mortgage</option>}
+                        {item.category === "Bank Borrowings" ? '' : <option value="Bank Borrowings" >Bank Borrowings</option>}
 
-                <label htmlFor="category">Category: </label>
-                <select id="category" name="category" onChange={handleChange} >
-                    <option value={item.category} >{item.category}</option>
 
-                    {item.category === "Equities" ? '' : <option value="Equities" >Equities</option>}
-                    {item.category === "Bonds" ? '' : <option value="Bonds" >Bonds</option>}
-                    {item.category === "Hedge Funds" ? '' : <option value="Hedge Funds" >Equities</option>}
-                    {item.category === "Cash" ? '' : <option value="Cash" >Cash</option>}
-                    {item.category === "Fixed Deposits" ? '' : <option value="Fixed Deposits" >Fixed Deposits</option>}
-                    {item.category === "Unlisted Assets" ? '' : <option value="Unlisted Assets" >Unlisted Assets</option>}
-                    {item.category === "Venture Capital" ? '' : <option value="Venture Capital" >Venture Capital</option>}
-                    {item.category === "Properties" ? '' : <option value="Properties" >Properties</option>}
-                    {item.category === "Mortgage" ? '' : <option value="Mortgage" >Mortgage</option>}
-                    {item.category === "Bank Borrowings" ? '' : <option value="Bank Borrowings" >Bank Borrowings</option>}
-                    {/* <option value="Bonds">Bonds</option>
-                    <option value="Hedge Funds">Hedge Funds</option>
-                    <option value="Cash">Cash</option>
-                    <option value="Fixed Deposits">Fixed Deposits</option>
-                    <option value="Unlisted Assets">Unlisted Assets</option>
-                    <option value="Venture Capital">Venture Capital</option>
-                    <option value="Properties">Properties</option>
-                    <option value="Mortgage">Mortgage</option>
-                    <option value="Bank Borrowings">Bank Borrowings</option> */}
-                </select>
-
-                <label htmlFor="notes">Notes: </label>
-                <textarea
-                    id="notes"
-                    name="notes"
-                    value={item.notes}
-                    onChange={handleChange}
-                ></textarea>
-
-                <label htmlFor="price">Price: </label>
-                <input
-                    type="number"
-                    id="price"
-                    name="price"
-                    value={item.price}
-                    onChange={handleChange}
-                />
-
-                <label htmlFor="curPrice">Current Price: </label>
-                <input
-                    type="number"
-                    id="curPrice"
-                    name="curPrice"
-                    value={item.curPrice}
-                    onChange={handleChange}
-                />
-
-                <label htmlFor="currency">Currency: </label>
-                <input
-                    type="text"
-                    id="currency"
-                    name="currency"
-                    value={item.currency}
-                    onChange={handleChange}
-                />
-
-                <label htmlFor="quantity">Quantity: </label>
-                <input
-                    type="number"
-                    id="quantity"
-                    name="quantity"
-                    value={item.quantity}
-                    onChange={handleChange}
-                />
-
-                <label htmlFor="date">Date: </label>
-                <input
-                    type="datetime-local"
-                    id="date"
-                    name="date"
-                    value={item.date}
-                    onChange={handleChange}
-                />
-
-                <button type="submit">Edit Item</button>
-            </form>
+                    </select>
+                    <br></br>
+                    <label htmlFor="notes">Notes: </label>
+                    <textarea
+                        id="notes"
+                        name="notes"
+                        value={item.notes}
+                        onChange={handleChange}
+                    ></textarea>
+                    <br></br>
+                    <label htmlFor="price">Price: </label>
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        value={item.price}
+                        onChange={handleChange}
+                    />
+                    <br></br>
+                    <label htmlFor="curPrice">Current Price: </label>
+                    <input
+                        type="number"
+                        id="curPrice"
+                        name="curPrice"
+                        value={item.curPrice}
+                        onChange={handleChange}
+                    />
+                    <br></br>
+                    <label htmlFor="currency">Currency: </label>
+                    <input
+                        type="text"
+                        id="currency"
+                        name="currency"
+                        value={item.currency}
+                        onChange={handleChange}
+                    />
+                    <br></br>
+                    <label htmlFor="quantity">Quantity: </label>
+                    <input
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        value={item.quantity}
+                        onChange={handleChange}
+                    />
+                    <br></br>
+                    <label htmlFor="date">Date: </label>
+                    <input
+                        type="datetime-local"
+                        id="date"
+                        name="date"
+                        value={item.date}
+                        onChange={handleChange}
+                    />
+                    <br></br>
+                    <button type="submit">Edit Item</button>
+                </form>
+            </div>
         </div >);
 };

@@ -320,14 +320,17 @@ export const Dashboard = () => {
         //selectedCurr = event.target.value;
         console.log("BEFORE", selectedCurr);
         setselectedCurr(event.target.value)
+        let ssc = event.target.value;
         console.log("AFTER", selectedCurr);
         var newResults = [...assets];
 
         Object.values(newResults[0].doc).forEach(async (type) => {
             Object.values(type.items).forEach(async (item) => {
                 var APIkey = "c74b84f35c15803fdcc331fcaab1f919";
-                let response1 = await [axios.get(`https://api.currencybeacon.com/v1/convert?api_key=${APIkey}&from=${item.currency}&to=${selectedCurr}&amount=${item.curPrice}`)]
+                let response1 = await [axios.get(`https://api.currencybeacon.com/v1/convert?api_key=${APIkey}&from=${item.currency}&to=${ssc}&amount=${item.curPrice}`)]
+
                 await Promise.all(response1).then((value) => {
+                    console.log("RESPONSE", ssc, value)
                     item.USDPrice = value[0].data.response.value;
                     setAssets([...newResults]);
                 })
@@ -336,7 +339,7 @@ export const Dashboard = () => {
         Object.values(newResults[1].doc).forEach(async (type) => {
             Object.values(type.items).forEach(async (item) => {
                 var APIkey = "c74b84f35c15803fdcc331fcaab1f919";
-                let response1 = await [axios.get(`https://api.currencybeacon.com/v1/convert?api_key=${APIkey}&from=${item.currency}&to=${selectedCurr}&amount=${item.curPrice}`)]
+                let response1 = await [axios.get(`https://api.currencybeacon.com/v1/convert?api_key=${APIkey}&from=${item.currency}&to=${ssc}&amount=${item.curPrice}`)]
                 await Promise.all(response1).then((value) => {
                     // console.log("inside promse all", value)
                     item.USDPrice = value[0].data.response.value;
@@ -408,14 +411,14 @@ export const Dashboard = () => {
                             <th>% Change</th>
                             <th>
                                 <form >
-                                    <label htmlFor="currency">Currency: </label>
+                                    <label htmlFor="currency">Current Price in:  </label>
+                                    <br></br>
                                     <select id="currency" name="currency" onChange={UpdateCurr} style={{ "width": "100%" }}>
 
                                         {currency_list.map((curr_val) => (
                                             <option value={curr_val.code} >{curr_val.name} - {curr_val.code}</option>
                                         ))}
                                     </select>
-                                    <button type="submit">Select</button>
                                 </form>
                             </th>
                         </tr>
