@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useGetUserID } from "../hooks/getUserID";
 import { useCookies } from "react-cookie";
-import DatePicker from 'react-datepicker';
+import DatePicker from 'react-datepicker/dist/react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 export const CreateItem = () => {

@@ -5,6 +5,7 @@ import { Auth } from './pages/auth';
 import { Dashboard } from './pages/dash';
 import { CreateItem } from "./pages/createitem";
 import { EditItem } from './pages/edit-item';
+import "react-datepicker/dist/react-datepicker.css";
 
 function App() {
   return (
