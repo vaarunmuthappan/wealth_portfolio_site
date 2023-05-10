@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 export const Auth = () => {
     return (<div className="auth">
-        <a href="http://localhost:3000/">
+        <a href="https://wealth-portfolio-site.onrender.com">
             <button className="bn632-hover bn21">Home</button>
         </a>
 
@@ -30,7 +30,7 @@ const Login = () => {
     const onSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/auth/login", {
+            const response = await axios.post("https://wealth-portfolio-site.onrender.com/auth/login", {
                 username,
                 password
             });
@@ -64,7 +64,7 @@ const Register = () => {
     const onSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post("http://localhost:3000/auth/register", {
+            await axios.post("https://wealth-portfolio-site.onrender.com/auth/register", {
                 username,
                 password,
             }).catch(function (error) {

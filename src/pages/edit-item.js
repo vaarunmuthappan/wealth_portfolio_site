@@ -30,7 +30,7 @@ export const EditItem = () => {
         const fetchItem = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:3000/dashboard/item/${location.state.id}`
+                    `https://wealth-portfolio-site.onrender.com/dashboard/item/${location.state.id}`
                 );
 
                 setItem(response.data);
@@ -57,7 +57,7 @@ export const EditItem = () => {
         event.preventDefault();
         try {
             await axios.post(
-                `http://localhost:3000/dashboard/update/${location.state.id}`,
+                `https://wealth-portfolio-site.onrender.com/dashboard/update/${location.state.id}`,
                 { ...item },
                 {
                     headers: { authorization: cookies.access_token },

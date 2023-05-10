@@ -9,7 +9,7 @@ export const Home = () => {
 
             <h1>Login or register to use.</h1>
 
-            <a href="http://localhost:3000/auth">
+            <a href="https://wealth-portfolio-site.onrender.com/auth">
                 <button className="bn632-hover bn21">Login / Register</button>
             </a>
 

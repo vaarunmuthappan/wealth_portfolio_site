@@ -205,7 +205,7 @@ export const Dashboard = () => {
         const fetchAssets = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:3000/dashboard/getuser/${userID}`
+                    `https://wealth-portfolio-site.onrender.com/dashboard/getuser/${userID}`
                 ).catch(function (error) {
                     //console.log(error.toJSON());
                 });
@@ -229,7 +229,7 @@ export const Dashboard = () => {
     }
 
     const deleteEntry = (id) => {
-        axios.delete('http://localhost:3000/dashboard/' + id)
+        axios.delete('https://wealth-portfolio-site.onrender.com/dashboard/' + id)
             .then(response => {
                 const newResults = assets.map(type => ({
                     ...type,
@@ -271,7 +271,7 @@ export const Dashboard = () => {
 
                                         try {
                                             axios.post(
-                                                `http://localhost:3000/dashboard/update/${id}`,
+                                                `https://wealth-portfolio-site.onrender.com/dashboard/update/${id}`,
                                                 item,
                                                 {
                                                     headers: { authorization: cookies.access_token },
@@ -348,39 +348,7 @@ export const Dashboard = () => {
             })
         })
 
-        //await new Promise(r => setTimeout(r, 2000));
-        //console.log("SETTING RESULTS")
         setAssets([...newResults]);
-        //setAssets([...newResults]);
-
-        // let promiseArr = [];console.log("FIN ASSETS", newResults)
-        // let results = assets.map(type => ({
-        //     ...type,
-        //     doc: type.doc.map(cat => ({
-        //         ...cat,
-        //         items: cat.items.map(async function (item2) {
-
-        //             var APIkey = "c74b84f35c15803fdcc331fcaab1f919";
-        //             let response1 = [await axios.get(`https://api.currencybeacon.com/v1/convert?api_key=${APIkey}&from=${item2.currency}&to=${selectedCurr}&amount=${item2.curPrice}`)]
-        //             // .then((response1) => {
-        //             //     console.log("PROMISE ALL RESP:", response1)
-        //             //     //item2.USDPrice = response1.data.response.value;
-        //             //     return item2;
-        //             // });
-        //             console.log("RESP 1", response1)
-        //             await Promise.all(response1).then((value) => {
-        //                 console.log("inside promse all", value)
-        //                 item2.USDPrice = value[0].data.response.value;
-        //                 return item2;
-        //             })
-        //         })
-        //     }))
-        // }))
-        // setAssets(results);
-        // .then(newResults => {
-        //     console.log("INSIDE LOOP", newResults)
-        //     setAssets(newResults);
-        // });
     };
 
     return (
@@ -442,7 +410,6 @@ export const Dashboard = () => {
                             <td></td>
                         </tr>
                         {
-                            //TODO: CREATE VARIABLE ASSETS EXIST
                             hasAssets === -1 ? "assets is null" : assets[hasAssets].doc.map((cat) => (
                                 <>
                                     <tr>

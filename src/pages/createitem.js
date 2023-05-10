@@ -226,7 +226,7 @@ export const CreateItem = () => {
                     item.USDPrice = response1.data.response.value;
                     try {
                         axios.post(
-                            "http://localhost:3000/dashboard/add",
+                            "https://wealth-portfolio-site.onrender.com/dashboard/add",
                             { ...item },
                             {
                                 headers: { authorization: cookies.access_token },
@@ -243,7 +243,7 @@ export const CreateItem = () => {
         else {
             try {
                 await axios.post(
-                    "http://localhost:3000/dashboard/add",
+                    "https://wealth-portfolio-site.onrender.com/dashboard/add",
                     { ...item },
                     {
                         headers: { authorization: cookies.access_token },
