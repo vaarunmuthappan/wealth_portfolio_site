@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -18,11 +16,12 @@ function Copyright(props) {
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
             <Link color="inherit" href="https://mui.com/">
-                Wealth Management Site
+                Vaarun Muthappan
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>
+
     );
 }
 
@@ -58,37 +57,27 @@ export default function Register() {
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} >
                                 <TextField
                                     autoComplete="given-name"
-                                    name="firstName"
+                                    name="username"
                                     required
                                     fullWidth
-                                    id="firstName"
-                                    label="First Name"
+                                    id="username"
+                                    label="User Name"
                                     autoFocus
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+
+                            {/* <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="family-name"
+                                    id="company"
+                                    label="Company"
+                                    name="company"
                                 />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                />
-                            </Grid>
+                            </Grid> */}
                             <Grid item xs={12}>
                                 <TextField
                                     required
@@ -100,12 +89,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
-                                />
-                            </Grid>
+
                         </Grid>
                         <Button
                             type="submit"
@@ -115,9 +99,11 @@ export default function Register() {
                         >
                             Sign Up
                         </Button>
-                        <Button component={Link} to="/" fullWidth variant="contained" color="primary">
-                            Back
-                        </Button>
+                        <Link href="/">
+                            <Button variant="contained" color="primary" fullWidth>
+                                Back
+                            </Button>
+                        </Link>
 
                         <Grid container justifyContent="flex-end">
                             <Grid item>
