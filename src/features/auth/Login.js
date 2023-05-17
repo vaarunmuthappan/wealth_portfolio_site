@@ -10,8 +10,14 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from "react-router-dom";
 
-import Image from '../img/building.jpeg';
+import { useLoginMutation } from './authApiSlice'
+import { setCredentials } from './authSlice';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react'
+
+import Image from '../../img/building.jpeg';
 
 function Copyright(props) {
     return (
@@ -29,13 +35,37 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
-    const handleSubmit = (event) => {
+    const [errMsg, setErrMsg] = useState('')
+    const navigate = useNavigate()
+
+    const [login, { isLoading }] = useLoginMutation()
+    const dispatch = useDispatch()
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        const user = data.get('username');
+        const pwd = data.get('password')
+        try {
+            const userData = await login({ user, pwd }).unwrap() //CHECK LOGIN ENDPOINT IN SLICE
+
+            dispatch(setCredentials({ ...userData, user }))
+
+            navigate('/dash');
+
+        } catch (err) {
+            if (!err?.originalStatus) {
+                // isLoading: true until timeout occurs
+                setErrMsg('No Server Response');
+            } else if (err.originalStatus === 400) {
+                setErrMsg('Missing Username or Password');
+            } else if (err.originalStatus === 401) {
+                setErrMsg('Unauthorized');
+            } else {
+                setErrMsg('Login Failed');
+            }
+        }
     };
 
     return (
@@ -94,6 +124,9 @@ export default function SignInSide() {
                                 type="password"
                                 id="password"
                             />
+                            <Typography component="h1" variant="h5">
+                                {errMsg}
+                            </Typography>
                             <Button
                                 type="submit"
                                 fullWidth
@@ -102,8 +135,8 @@ export default function SignInSide() {
                             >
                                 Sign In
                             </Button>
-                            <Grid container>
 
+                            <Grid container>
                                 <Grid item>
                                     <Link href="/register" variant="body2">
                                         {"Don't have an account? Sign Up"}

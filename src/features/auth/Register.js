@@ -11,6 +11,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import { useState } from 'react'
+import { useNavigate } from "react-router-dom";
+import { useRegisterMutation } from './authApiSlice'
+
+
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -28,13 +33,39 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Register() {
-    const handleSubmit = (event) => {
+    const [errMsg, setErrMsg] = useState('')
+    const navigate = useNavigate()
+    const [register, { isLoading }] = useRegisterMutation()
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        // data.get('password')
+        const user = data.get('username');
+        const pwd = data.get('password');
+        const firm = data.get('company')
+        try {
+            const userData = await register({ user, pwd, firm }).unwrap()
+
+            console.log("state", userData)
+
+            setErrMsg(userData.success);
+        } catch (err) {
+            console.log(err.originalStatus)
+            if (!err?.originalStatus) {
+                // isLoading: true until timeout occurs
+                setErrMsg('No Server Response');
+            } else if (err.originalStatus === 400) {
+                setErrMsg('Missing Username or Password or Firm');
+            } else if (err.originalStatus === 401) {
+                setErrMsg('Unauthorized');
+            } else if (err.originalStatus === 409) {
+                setErrMsg('Company is registered, check with admin');
+            } else {
+                setErrMsg('Login Failed');
+            }
+        }
     };
 
     return (
@@ -69,7 +100,7 @@ export default function Register() {
                                 />
                             </Grid>
 
-                            {/* <Grid item xs={12}>
+                            <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
@@ -77,7 +108,7 @@ export default function Register() {
                                     label="Company"
                                     name="company"
                                 />
-                            </Grid> */}
+                            </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     required
@@ -91,6 +122,9 @@ export default function Register() {
                             </Grid>
 
                         </Grid>
+                        <Typography component="h1" variant="h5">
+                            {errMsg}
+                        </Typography>
                         <Button
                             type="submit"
                             fullWidth
