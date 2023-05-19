@@ -48,8 +48,9 @@ export default function SignInSide() {
         const user = data.get('username');
         const pwd = data.get('password')
         try {
+            setErrMsg("Waiting for server...")
             const userData = await login({ user, pwd }).unwrap() //CHECK LOGIN ENDPOINT IN SLICE
-
+            setErrMsg("Loaded...")
             dispatch(setCredentials({ ...userData, user }))
 
             navigate('/dash');

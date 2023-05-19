@@ -6,16 +6,18 @@ import {
     InputLabel,
     MenuItem,
     Grid,
-    FormControl,
     Select,
     Button,
-    FormControlLabel,
     useTheme,
 } from "@mui/material";
 import {
     AddCircleTwoTone,
 } from "@mui/icons-material";
 // import { MuiPickersUtilsProvider, DatePicker } from '@mui/material-ui-pickers'
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 import Header from "../../components/Header";
 import { useState } from "react";
@@ -211,7 +213,6 @@ const AddItem = () => {
     ]
 
     const dateToday = new Date();
-    const userID = store.getState().auth.userID;
     const [item, setItem] = useState({
         firm: store.getState().auth.firm,
         name: "",
@@ -224,7 +225,7 @@ const AddItem = () => {
         currency: "USD",
         quantity: 0,
         date: dateToday.toISOString().substring(0, 16), //
-        soldDate: dateToday.toISOString().substring(0, 16) //
+        soldDate: null,
     });
     const [ErrMsg, setErrMsg] = useState("")
 
@@ -237,7 +238,7 @@ const AddItem = () => {
         event.preventDefault();
 
         try {
-            setItem({ ...item, ["curPrice"]: item.price });
+            setItem({ item });
             const result = await addItem(item).unwrap() //CHECK LOGIN ENDPOINT IN SLICE
 
             setErrMsg(result['message'])
@@ -258,201 +259,227 @@ const AddItem = () => {
 
 
     return (
-        <Box m="1.5rem 2.5rem">
-            <Header title="Add Transaction" subtitle="" />
-            <Box component="form" noValidate onSubmit={handleSubmit}>
-                {/* Name */}
-                <Box m="5rem">
-                    <Grid item xs={12} sm={2}>
-                        <InputLabel
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                fontWeight: 700
-                            }}
-                        >
-                            Name
-                        </InputLabel>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            id="name"
-                            name="name"
-                            label="Name"
-                            fullWidth
-                            size="small"
-                            autoComplete="off"
-                            variant="outlined"
-                            onChange={handleChange}
-                        />
-                    </Grid>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box m="1.5rem 2.5rem">
+                <Header title="Add Transaction" subtitle="" />
+                <Box component="form" noValidate onSubmit={handleSubmit}>
+                    {/* Name */}
+                    <Box m="5rem">
+                        <Grid item xs={12} sm={2}>
+                            <InputLabel
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    fontWeight: 700
+                                }}
+                            >
+                                Name
+                            </InputLabel>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                required
+                                id="name"
+                                name="name"
+                                label="Name"
+                                fullWidth
+                                size="small"
+                                autoComplete="off"
+                                variant="outlined"
+                                onChange={handleChange}
+                            />
+                        </Grid>
 
-                    {/* Category */}
-                    <Grid item xs={12} sm={2}>
-                        <InputLabel
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                fontWeight: 700
-                            }}
-                        >
-                            Category
-                        </InputLabel>
-                    </Grid>
-                    <Grid item fullWidth xs={12} sm={4}>
-                        <InputLabel id="demo-simple-select-label">Category</InputLabel>
-                        <Select
-                            labelId="category"
-                            id="category"
-                            name="category"
-                            value={item.category}
-                            label="Category"
-                            fullWidth
-                            onChange={handleChange}
-                        >
-                            {categories.map((item) => (
-                                <MenuItem value={item}>{item}</MenuItem>
-                            ))}
-                        </Select>
-                    </Grid>
+                        {/* Category */}
+                        <Grid item xs={12} sm={2}>
+                            <InputLabel
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    fontWeight: 700
+                                }}
+                            >
+                                Category
+                            </InputLabel>
+                        </Grid>
+                        <Grid item fullWidth xs={12} sm={4}>
+                            <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                            <Select
+                                required
+                                labelId="category"
+                                id="category"
+                                name="category"
+                                value={item.category}
+                                label="Category"
+                                fullWidth
+                                onChange={handleChange}
+                            >
+                                {categories.map((item) => (
+                                    <MenuItem value={item}>{item}</MenuItem>
+                                ))}
+                            </Select>
+                        </Grid>
 
-                    {/* Current Price */}
-                    <Grid item xs={12} sm={2}>
-                        <InputLabel
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                fontWeight: 700
-                            }}
-                        >
-                            Current Price
-                        </InputLabel>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            id="price"
-                            name="price"
-                            label="Price"
-                            fullWidth
-                            size="small"
-                            autoComplete="off"
-                            variant="outlined"
-                            onChange={handleChange}
-                        />
-                    </Grid>
+                        {/* Current Price */}
+                        <Grid item xs={12} sm={2}>
+                            <InputLabel
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    fontWeight: 700
+                                }}
+                            >
+                                Initial Value (Total)
+                            </InputLabel>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                required
+                                id="price"
+                                name="price"
+                                label="Initial Value"
+                                fullWidth
+                                size="small"
+                                autoComplete="off"
+                                variant="outlined"
+                                onChange={handleChange}
+                            />
+                        </Grid>
 
-                    {/* Current Currency */}
-                    <Grid item xs={12} sm={2}>
-                        <InputLabel
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                fontWeight: 700
-                            }}
-                        >
-                            Currency
-                        </InputLabel>
-                    </Grid>
+                        {/* Current Price */}
+                        <Grid item xs={12} sm={2}>
+                            <InputLabel
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    fontWeight: 700
+                                }}
+                            >
+                                Current Value (Total)
+                            </InputLabel>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="curPrice"
+                                name="curPrice"
+                                label="Current Value"
+                                fullWidth
+                                size="small"
+                                autoComplete="off"
+                                variant="outlined"
+                                onChange={handleChange}
+                            />
+                        </Grid>
 
-                    <Grid item fullWidth xs={12} sm={4}>
-                        <InputLabel id="demo-simple-select-label">Currency</InputLabel>
-                        <Select
-                            labelId="currency"
-                            id="currency"
-                            name="currency"
-                            value={item.currency}
-                            fullWidth
-                            label="Currency"
-                            onChange={handleChange}
-                        >
-                            {currency_list.map((citem) => (
-                                <MenuItem value={citem.code}>{citem.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </Grid>
+                        {/* Current Currency */}
+                        <Grid item xs={12} sm={2}>
+                            <InputLabel
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    fontWeight: 700
+                                }}
+                            >
+                                Currency
+                            </InputLabel>
+                        </Grid>
 
-                    {/* USD Price */}
-                    <Grid item xs={12} sm={2}>
-                        <InputLabel
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                fontWeight: 700
-                            }}
-                        >
-                            US Dollar Price
-                        </InputLabel>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            id="USDPrice"
-                            name="USDPrice"
-                            label="USD Price"
-                            fullWidth
-                            size="small"
-                            autoComplete="off"
-                            variant="outlined"
-                            onChange={handleChange}
-                        />
-                    </Grid>
+                        <Grid item fullWidth xs={12} sm={4}>
+                            <InputLabel id="demo-simple-select-label">Currency</InputLabel>
+                            <Select
+                                labelId="currency"
+                                id="currency"
+                                name="currency"
+                                value={item.currency}
+                                fullWidth
+                                label="Currency"
+                                onChange={handleChange}
+                            >
+                                {currency_list.map((citem) => (
+                                    <MenuItem value={citem.code}>{citem.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </Grid>
 
-                    {/* Quantity */}
-                    <Grid item xs={12} sm={2}>
-                        <InputLabel
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                fontWeight: 700
-                            }}
-                        >
-                            Quantity
-                        </InputLabel>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            id="quant"
-                            name="quantity"
-                            label="Quantity"
-                            fullWidth
-                            size="small"
-                            autoComplete="off"
-                            variant="outlined"
-                            onChange={handleChange}
-                        />
-                    </Grid>
+                        {/* USD Price */}
+                        <Grid item xs={12} sm={2}>
+                            <InputLabel
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    fontWeight: 700
+                                }}
+                            >
+                                US Dollar Value (Total)
+                            </InputLabel>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
 
-                    {/* Description */}
-                    <Grid item xs={12} sm={2}>
-                        <InputLabel
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                fontWeight: 700
-                            }}
-                        >
-                            Description
-                        </InputLabel>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            id="notes"
-                            name="notes"
-                            label="Description"
-                            fullWidth
-                            size="small"
-                            autoComplete="off"
-                            variant="outlined"
-                            onChange={handleChange}
-                        />
-                    </Grid>
+                                id="USDPrice"
+                                name="USDPrice"
+                                label="USD Price"
+                                fullWidth
+                                size="small"
+                                autoComplete="off"
+                                variant="outlined"
+                                onChange={handleChange}
+                            />
+                        </Grid>
 
-                    {/* Date of Purchase */}
-                    {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        {/* Quantity */}
+                        <Grid item xs={12} sm={2}>
+                            <InputLabel
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    fontWeight: 700
+                                }}
+                            >
+                                Quantity
+                            </InputLabel>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                required
+                                id="quant"
+                                name="quantity"
+                                label="Quantity"
+                                fullWidth
+                                size="small"
+                                autoComplete="off"
+                                variant="outlined"
+                                onChange={handleChange}
+                            />
+                        </Grid>
+
+                        {/* Description */}
+                        <Grid item xs={12} sm={2}>
+                            <InputLabel
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    fontWeight: 700
+                                }}
+                            >
+                                Description
+                            </InputLabel>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+
+                                id="notes"
+                                name="notes"
+                                label="Description"
+                                fullWidth
+                                size="small"
+                                autoComplete="off"
+                                variant="outlined"
+                                onChange={handleChange}
+                            />
+                        </Grid>
+
+                        {/* Date of Purchase */}
                         <Grid item xs={12} sm={2}>
                             <InputLabel
                                 sx={{
@@ -466,22 +493,20 @@ const AddItem = () => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <DatePicker
-                                required
                                 id="date"
                                 name="date"
+                                type="date"
+                                required
                                 label="Date of Purchase"
                                 fullWidth
                                 size="small"
                                 variant="outlined"
-                                onChange={handleChange}
+                                value={dayjs(item.date)}
+                                onChange={date => handleChange({ target: { value: date, name: 'date' } })}
                             />
                         </Grid>
-                    </MuiPickersUtilsProvider> */}
 
-                    {/* Date Sold */}
-
-                    {/* Error Message */}
-                    <Box m="5rem">
+                        {/* Date Sold */}
                         <Grid item xs={12} sm={2}>
                             <InputLabel
                                 sx={{
@@ -490,33 +515,61 @@ const AddItem = () => {
                                     fontWeight: 700
                                 }}
                             >
-                                {ErrMsg}
+                                Date Sold
                             </InputLabel>
                         </Grid>
-                    </Box>
-
-                    {/* Submit */}
-                    <Box m="5rem">
-                        <Grid item xs={12} sm={2}>
-                            <Button
-                                type="submit"
-                                sx={{
-                                    backgroundColor: theme.palette.secondary.light,
-                                    color: theme.palette.background.alt,
-                                    fontSize: "14px",
-                                    fontWeight: "bold",
-                                    display: "flex",
-                                    justifyContent: "center"
-                                }}
-                            >
-                                <AddCircleTwoTone sx={{ mr: "10px" }} />
-                                Submit
-                            </Button>
+                        <Grid item xs={12} sm={6}>
+                            <DatePicker
+                                id="soldDate"
+                                name="soldDate"
+                                type="date"
+                                label="Date Sold"
+                                fullWidth
+                                size="small"
+                                // variant="outlined"
+                                value={dayjs(item.soldDate)}
+                                onChange={date => handleChange({ target: { value: date, name: 'date' } })}
+                            />
                         </Grid>
+
+                        {/* Error Message */}
+                        <Box m="5rem">
+                            <Grid item xs={12} sm={2}>
+                                <InputLabel
+                                    sx={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        fontWeight: 700
+                                    }}
+                                >
+                                    {ErrMsg}
+                                </InputLabel>
+                            </Grid>
+                        </Box>
+
+                        {/* Submit */}
+                        <Box m="5rem">
+                            <Grid item xs={12} sm={2}>
+                                <Button
+                                    type="submit"
+                                    sx={{
+                                        backgroundColor: theme.palette.secondary.light,
+                                        color: theme.palette.background.alt,
+                                        fontSize: "14px",
+                                        fontWeight: "bold",
+                                        display: "flex",
+                                        justifyContent: "center"
+                                    }}
+                                >
+                                    <AddCircleTwoTone sx={{ mr: "10px" }} />
+                                    Submit
+                                </Button>
+                            </Grid>
+                        </Box>
                     </Box>
                 </Box>
             </Box>
-        </Box>
+        </LocalizationProvider>
     );
 };
 

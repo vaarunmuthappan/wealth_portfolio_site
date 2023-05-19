@@ -334,7 +334,7 @@ const EditItem = () => {
                                 fontWeight: 700
                             }}
                         >
-                            Current Price
+                            Current Value (Total)
                         </InputLabel>
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -342,7 +342,7 @@ const EditItem = () => {
                             required
                             id="price"
                             name="price"
-                            label="Price"
+                            label="Current Value"
                             fullWidth
                             size="small"
                             autoComplete="off"
@@ -391,7 +391,7 @@ const EditItem = () => {
                                 fontWeight: 700
                             }}
                         >
-                            US Dollar Price
+                            US Dollar Value (Total)
                         </InputLabel>
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -399,7 +399,7 @@ const EditItem = () => {
                             required
                             id="USDPrice"
                             name="USDPrice"
-                            label="USD Price"
+                            label="USD Value"
                             fullWidth
                             size="small"
                             autoComplete="off"
