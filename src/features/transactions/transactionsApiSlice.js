@@ -9,24 +9,27 @@ export const transApiSlice = apiSlice.injectEndpoints({
                 url: `/assets/all/${store.getState().auth.userID}`,
                 method: "GET",
                 params: { page, pageSize, sort, search },
-            })
+            }),
+            providesTags: ['Items']
         }),
         AddItem: builder.mutation({
             query: credentials => ({
                 url: '/assets',
                 method: 'POST',
                 body: { ...credentials }
-            })
+            }),
+            invalidatesTags: ['Items']
         }),
         DeleteItem: builder.mutation({
             query: id => ({
                 url: '/assets',
                 method: 'DELETE',
                 body: { "id": id }
-            })
+            }),
+            invalidatesTags: ['Items']
         }),
         GetItemById: builder.query({
-            query: (id) => `/assets/${id}`,
+            query: (id) => `/assets/${id}`
         }),
     })
 })

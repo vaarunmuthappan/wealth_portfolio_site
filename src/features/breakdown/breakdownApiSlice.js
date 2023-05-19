@@ -5,6 +5,7 @@ export const breakdownApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         GetBreakdown: builder.query({
             query: () => `/assets/breakdown/${store.getState().auth.firm}`,
+            providesTags: ['Items']
         }),
     })
 })

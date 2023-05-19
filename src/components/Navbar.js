@@ -23,6 +23,8 @@ import {
 
 import { logOut } from '../features/auth/authSlice';
 import { useNavigate } from "react-router-dom";
+import { apiSlice } from "../app/api/ownApi";
+
 
 const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
     const dispatch = useDispatch();
@@ -35,8 +37,9 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
     const handleClose = () => setAnchorEl(null);
 
     const logout = () => {
-        dispatch(logOut())
-        navigate('/')
+        dispatch(logOut());
+        dispatch(apiSlice.util.resetApiState());
+        navigate('/');
     }
 
     return (

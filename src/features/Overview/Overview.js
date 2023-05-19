@@ -34,6 +34,7 @@ const Overview = () => {
     const today = new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(date);
 
     const authStore = store.getState().auth;
+    console.log("overview", authStore)
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
