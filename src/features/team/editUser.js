@@ -17,11 +17,14 @@ import Header from "../../components/Header";
 import { useGetUserByIdQuery } from './teamApiSlice'
 import { useState, useEffect } from "react";
 import { store } from '../../app/store'
+import { useUpdateUserMutation } from './teamApiSlice'
 
 const EditUser = () => {
     const urlarr = window.location.pathname.split('/');
     const ID = urlarr.pop();
     const theme = useTheme();
+
+    const [editUser, { isLoadingUpdate }] = useUpdateUserMutation()
 
     const [user, setUser] = useState({
         firstName: "",
@@ -31,7 +34,7 @@ const EditUser = () => {
         firm: store.getState().auth.firm,
         role: "Employee",
         active: "Active",
-        roles: [],
+        roles: []
     });
 
     const { data, error, isLoading, isSuccess, isError } = useGetUserByIdQuery(ID);
@@ -46,7 +49,6 @@ const EditUser = () => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        console.log(name, value)
         setUser({ ...user, [name]: value });
     };
 
@@ -54,10 +56,9 @@ const EditUser = () => {
         event.preventDefault();
 
         try {
-            //const userData = await addUser(user).unwrap() //CHECK LOGIN ENDPOINT IN SLICE
-            //setErrMsg(userData['success'])
-
-            setErrMsg("TODO: PATCH CALL")
+            console.log(user, ID)
+            const response = await editUser(user, ID).unwrap()
+            setErrMsg(response['message'])
 
         } catch (err) {
             if (!err?.originalStatus) {

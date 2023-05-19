@@ -3,8 +3,8 @@ import { setCredentials, logOut } from '../../features/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
     // for local running
-    // baseUrl: 'http://localhost:3500', 
-    baseUrl: 'https://wealth-portfolio-api.onrender.com',
+    baseUrl: 'http://localhost:3500',
+    //baseUrl: 'https://wealth-portfolio-api.onrender.com',
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         const token = getState().auth.token

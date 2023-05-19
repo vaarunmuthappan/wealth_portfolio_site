@@ -23,6 +23,13 @@ export const teamApiSlice = apiSlice.injectEndpoints({
         GetUserById: builder.query({
             query: (id) => `/users/${id}`,
         }),
+        UpdateUser: builder.mutation({
+            query: (user, id) => ({
+                url: `/users/${id}`,
+                method: 'PATCH',
+                body: { ...user }
+            })
+        }),
     })
 })
 
@@ -31,4 +38,5 @@ export const {
     useAddUserMutation,
     useDeleteUserMutation,
     useGetUserByIdQuery,
+    useUpdateUserMutation,
 } = teamApiSlice

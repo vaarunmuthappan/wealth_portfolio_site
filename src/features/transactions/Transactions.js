@@ -5,7 +5,6 @@ import { useGetTransactionsQuery } from "./transactionsApiSlice";
 import Header from "../../components/Header";
 import DataGridCustomToolbar from "../../components/DataGridCustomToolbar";
 import FlexBetween from "../../components/FlexBetween";
-import { store } from '../../app/store'
 import { useNavigate } from "react-router-dom";
 import {
     AddCircleTwoTone,
