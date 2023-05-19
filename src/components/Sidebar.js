@@ -1,7 +1,6 @@
 import React from "react";
 import {
     Box,
-    Divider,
     Drawer,
     IconButton,
     List,
@@ -13,25 +12,16 @@ import {
     useTheme,
 } from "@mui/material";
 import {
-    SettingsOutlined,
     ChevronLeft,
     ChevronRightOutlined,
     HomeOutlined,
-    ShoppingCartOutlined,
-    Groups2Outlined,
     ReceiptLongOutlined,
-    PublicOutlined,
-    PointOfSaleOutlined,
-    TodayOutlined,
-    CalendarMonthOutlined,
     AdminPanelSettingsOutlined,
-    TrendingUpOutlined,
     PieChartOutlined,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
-import profileImage from "../img/profile.jpg";
 import { store } from '../app/store'
 
 const navItems = [
@@ -45,14 +35,6 @@ const navItems = [
         icon: null,
 
     },
-    // {
-    //     text: "Products",
-    //     icon: <ShoppingCartOutlined />,
-    // },
-    // {
-    //     text: "Customers",
-    //     icon: <Groups2Outlined />,
-    // },
     {
         text: "Transactions",
         icon: <ReceiptLongOutlined />,
@@ -63,26 +45,6 @@ const navItems = [
         icon: <PieChartOutlined />,
         url: "breakdown",
     },
-    // {
-    //     text: "Geography",
-    //     icon: <PublicOutlined />,
-    // },
-    // {
-    //     text: "Sales",
-    //     icon: null,
-    // },
-    // {
-    //     text: "Overview",
-    //     icon: <PointOfSaleOutlined />,
-    // },
-    // {
-    //     text: "Daily",
-    //     icon: <TodayOutlined />,
-    // },
-    // {
-    //     text: "Monthly",
-    //     icon: <CalendarMonthOutlined />,
-    // },
     {
         text: "Management",
         icon: null,
@@ -93,10 +55,6 @@ const navItems = [
         icon: <AdminPanelSettingsOutlined />,
         url: "team",
     },
-    // {
-    //     text: "Performance",
-    //     icon: <TrendingUpOutlined />,
-    // },
 ];
 
 const Sidebar = ({

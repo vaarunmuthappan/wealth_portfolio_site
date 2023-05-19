@@ -1,14 +1,10 @@
 import React from "react";
 import { ResponsivePie } from "@nivo/pie";
 import { Box, Typography, useTheme } from "@mui/material";
-//TODO CHANGE WITH API
-//import { useGetSalesQuery } from "state/api";
 
 const BreakdownChart = ({ data, isDashboard = false }) => {
 
     const isLoading = false;
-    //todo: change to query like below later
-    //const { data, isLoading } = useGetSalesQuery();
 
     const theme = useTheme();
 

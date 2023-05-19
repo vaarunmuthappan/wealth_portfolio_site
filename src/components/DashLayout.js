@@ -4,8 +4,6 @@ import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
-//TODO1: GET DATA
-// import { useGetUserQuery } from "state/api";
 
 const Layout = () => {
     const isNonMobile = useMediaQuery("(min-width: 600px)");
@@ -13,8 +11,6 @@ const Layout = () => {
     const userId = useSelector((state) => state.admin.userId);
 
     const { data } = { name: "User1 Name", occupation: "User1 Occupation" };
-    //TODO1: CHANGE BELOW FROM query above 
-    //const { data } = useGetUserQuery(userId);
 
     return (
         <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">

@@ -44,9 +44,11 @@ export default function Register() {
         // data.get('password')
         const user = data.get('username');
         const pwd = data.get('password');
-        const firm = data.get('company')
+        const firm = data.get('company');
+        const firstName = data.get('firstName');
+        const lastName = data.get('lastName')
         try {
-            const userData = await register({ user, pwd, firm }).unwrap()
+            const userData = await register({ user, pwd, firm, firstName, lastName }).unwrap()
 
             console.log("state", userData)
 
@@ -99,7 +101,28 @@ export default function Register() {
                                     autoFocus
                                 />
                             </Grid>
-
+                            <Grid item xs={12} >
+                                <TextField
+                                    autoComplete="given-name"
+                                    name="firstName"
+                                    required
+                                    fullWidth
+                                    id="firstName"
+                                    label="First Name"
+                                    autoFocus
+                                />
+                            </Grid>
+                            <Grid item xs={12} >
+                                <TextField
+                                    autoComplete="given-name"
+                                    name="lastName"
+                                    required
+                                    fullWidth
+                                    id="lastName"
+                                    label="Last Name"
+                                    autoFocus
+                                />
+                            </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     required

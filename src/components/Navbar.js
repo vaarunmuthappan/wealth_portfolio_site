@@ -3,11 +3,8 @@ import {
     LightModeOutlined,
     DarkModeOutlined,
     Menu as MenuIcon,
-    Search,
-    SettingsOutlined,
     ArrowDropDownOutlined,
 } from "@mui/icons-material";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FlexBetween from "./FlexBetween";
 import { useDispatch } from "react-redux";
 import { setMode } from "./adminSlice";
@@ -18,7 +15,6 @@ import {
     Box,
     Typography,
     IconButton,
-    InputBase,
     Toolbar,
     Menu,
     MenuItem,

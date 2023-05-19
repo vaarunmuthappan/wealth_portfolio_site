@@ -6,9 +6,29 @@ export const teamApiSlice = apiSlice.injectEndpoints({
         GetTeam: builder.query({
             query: () => `/users/team/${store.getState().auth.userID}`,
         }),
+        AddUser: builder.mutation({
+            query: credentials => ({
+                url: '/users',
+                method: 'POST',
+                body: { ...credentials }
+            })
+        }),
+        DeleteUser: builder.mutation({
+            query: id => ({
+                url: '/users',
+                method: 'DELETE',
+                body: { "id": id }
+            })
+        }),
+        GetUserById: builder.query({
+            query: (id) => `/users/${id}`,
+        }),
     })
 })
 
 export const {
-    useGetTeamQuery
+    useGetTeamQuery,
+    useAddUserMutation,
+    useDeleteUserMutation,
+    useGetUserByIdQuery,
 } = teamApiSlice

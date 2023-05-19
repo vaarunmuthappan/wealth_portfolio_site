@@ -1,13 +1,30 @@
 import React from "react";
-import { Box, useTheme } from "@mui/material";
+import { Box, useTheme, Button } from "@mui/material";
 import { useGetTeamQuery } from "./teamApiSlice";
 import Header from "../../components/Header";
 import { DataGrid } from "@mui/x-data-grid";
+import FlexBetween from "../../components/FlexBetween";
+import { useNavigate } from "react-router-dom";
+import {
+    AddCircleTwoTone,
+} from "@mui/icons-material";
+import { useDeleteUserMutation } from './teamApiSlice'
 
 
 const TeamList = () => {
     const theme = useTheme();
     const { data, isLoading } = useGetTeamQuery();
+
+    const navigate = useNavigate();
+    const [deleteUser, { isDeleted }] = useDeleteUserMutation()
+
+    const onEdit = (e, row) => {
+        navigate(`editUser/${row._id}`);
+    }
+
+    const onDelete = (e, row) => {
+        deleteUser(row._id);
+    }
 
     const columns = [
         {
@@ -40,11 +57,54 @@ const TeamList = () => {
             headerName: "Status",
             flex: 0.5,
         },
+        {
+            field: "actions",
+            headerName: "",
+            renderCell: (params) => {
+                return (
+                    <Box>
+                        <Button
+                            onClick={(e) => onEdit(e, params.row)}
+                            variant="contained"
+                        >
+                            Edit
+                        </Button>
+                        <Button
+                            onClick={(e) => onDelete(e, params.row)}
+                            variant="contained"
+                        >
+                            Delete
+                        </Button>
+                    </Box>
+                );
+            },
+            flex: 1.5,
+        }
     ];
 
     return (
         <Box m="1.5rem 2.5rem">
-            <Header title="Administrative Team" subtitle="List of team members" />
+            <FlexBetween>
+                <Header title="Administrative Team" subtitle="List of team members" />
+                <Box>
+                    <Button
+                        onClick={() => {
+                            navigate(`/dash/team/addUser`);
+                        }}
+                        sx={{
+                            backgroundColor: theme.palette.secondary.light,
+                            color: theme.palette.background.alt,
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            padding: "10px 20px",
+                        }}
+                    >
+                        <AddCircleTwoTone sx={{ mr: "10px" }} />
+                        Add User
+                    </Button>
+                </Box>
+            </FlexBetween>
+
             <Box
                 mt="40px"
                 height="75vh"

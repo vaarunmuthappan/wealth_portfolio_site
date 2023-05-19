@@ -10,10 +10,14 @@ import Layout from './components/DashLayout'
 import Login from './features/auth/Login'
 import Register from './features/auth/Register'
 import RequireAuth from './features/auth/RequireAuth'
-import Overview from './pages/Overview'
+import Overview from './features/Overview/Overview'
 import Transactions from './features/transactions/Transactions'
 import Breakdown from './features/breakdown/Breakdown'
 import TeamList from './features/team/teamTable'
+import AddItem from './features/transactions/addItem';
+import EditItem from './features/transactions/editItem';
+import AddUser from './features/team/addUser';
+import EditUser from './features/team/editUser';
 
 function App() {
   const mode = useSelector((state) => state.admin.mode);
@@ -36,10 +40,14 @@ function App() {
 
                 <Route path="/dash/transactions">
                   <Route index element={<Transactions />} />
+                  <Route path="addItem" element={<AddItem />} />
+                  <Route path="editItem/:id" element={<EditItem />} />
                 </Route>
 
                 <Route path="/dash/team">
                   <Route index element={<TeamList />} />
+                  <Route path="addUser" element={<AddUser />} />
+                  <Route path="editUser/:id" element={<EditUser />} />
                 </Route>
 
                 <Route path="/dash/breakdown">

@@ -1,9 +1,16 @@
 import React, { useState } from "react";
-import { Box, useTheme } from "@mui/material";
+import { Box, useTheme, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "./transactionsApiSlice";
 import Header from "../../components/Header";
 import DataGridCustomToolbar from "../../components/DataGridCustomToolbar";
+import FlexBetween from "../../components/FlexBetween";
+import { store } from '../../app/store'
+import { useNavigate } from "react-router-dom";
+import {
+    AddCircleTwoTone,
+} from "@mui/icons-material";
+import { useDeleteItemMutation, useGetItemByIdQuery } from './transactionsApiSlice'
 
 const Transactions = () => {
     const theme = useTheme();
@@ -16,22 +23,23 @@ const Transactions = () => {
 
     const [searchInput, setSearchInput] = useState("");
 
-    // const data = {
-    //     "total": 1000,
-    //     "transactions": [
-    //         { _id: 1, name: "amazon stocks", category: "cash", initPrice: 56.6, initQuant: 2, currPrice: 100, date: 'March 18 2017', notes: "Nice", sold: "Nope" },
-    //         { _id: 1, name: "amazon stocks", category: "stocks", initPrice: 56.6, initQuant: 2, currPrice: 100, date: 'March 18 2017', notes: "Nice", sold: "Nope" },
-    //         { _id: 1, name: "amazon stocks", category: "stocks", initPrice: 56.6, initQuant: 2, currPrice: 100, date: 'March 18 2017', notes: "Nice", sold: "Nope" },
-    //     ]
-    // };
-    //TODO: USE API
+    const navigate = useNavigate();
+    const [deleteItem, { isDeleted }] = useDeleteItemMutation()
+
+    const onEdit = (e, row) => {
+        navigate(`editItem/${row._id}`);
+    }
+
+    const onDelete = (e, row) => {
+        deleteItem(row._id);
+    }
+
     const { data, isLoading } = useGetTransactionsQuery({
         page,
         pageSize,
         sort: JSON.stringify(sort),
         search,
     });
-
 
     const columns = [
         {
@@ -52,7 +60,7 @@ const Transactions = () => {
         },
         {
             field: "quantity",
-            headerName: "Initial Quantity",
+            headerName: " Quantity",
             flex: 1,
         },
         {
@@ -72,15 +80,57 @@ const Transactions = () => {
             flex: 1,
         },
         {
-            field: "sold",
-            headerName: "Sold?",
-            flex: 1,
+            field: "soldDate",
+            headerName: "Date Sold",
+            flex: 0.5,
         },
+        {
+            field: "actions",
+            headerName: "",
+            renderCell: (params) => {
+                return (
+                    <Box>
+                        <Button
+                            onClick={(e) => onEdit(e, params.row)}
+                            variant="contained"
+                        >
+                            Edit
+                        </Button>
+                        <Button
+                            onClick={(e) => onDelete(e, params.row)}
+                            variant="contained"
+                        >
+                            Delete
+                        </Button>
+                    </Box>
+                );
+            },
+            flex: 1,
+        }
     ];
 
     return (
         <Box m="1.5rem 2.5rem">
-            <Header title="TRANSACTIONS" subtitle="Entire list of transactions" />
+            <FlexBetween>
+                <Header title="TRANSACTIONS" subtitle="Entire list of transactions" />
+                <Box>
+                    <Button
+                        onClick={() => {
+                            navigate(`/dash/transactions/addItem`);
+                        }}
+                        sx={{
+                            backgroundColor: theme.palette.secondary.light,
+                            color: theme.palette.background.alt,
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            padding: "10px 20px",
+                        }}
+                    >
+                        <AddCircleTwoTone sx={{ mr: "10px" }} />
+                        Add Item
+                    </Button>
+                </Box>
+            </FlexBetween>
             <Box
                 height="80vh"
                 sx={{
