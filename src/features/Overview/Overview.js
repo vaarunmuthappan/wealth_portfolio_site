@@ -37,7 +37,7 @@ const Overview = () => {
     const printRef = React.useRef();
 
     const authStore = store.getState().auth;
-    console.log("overview", authStore)
+
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
