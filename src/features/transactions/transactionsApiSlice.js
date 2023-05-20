@@ -31,6 +31,14 @@ export const transApiSlice = apiSlice.injectEndpoints({
         GetItemById: builder.query({
             query: (id) => `/assets/${id}`
         }),
+        UpdateItem: builder.mutation({
+            query: (item) => ({
+                url: `/assets/${item.id}`,
+                method: 'PATCH',
+                body: { ...item }
+            }),
+            invalidatesTags: ['Items']
+        })
     })
 })
 
@@ -39,4 +47,5 @@ export const {
     useAddItemMutation,
     useDeleteItemMutation,
     useGetItemByIdQuery,
+    useUpdateItemMutation,
 } = transApiSlice

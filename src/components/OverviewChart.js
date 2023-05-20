@@ -61,7 +61,6 @@ const OverviewChart = ({ isDashboard = false, view }) => {
 
         var accAssets = 0;
         for (const [key, value] of Object.entries(assetSorted)) {
-            console.log(key, value);
             accAssets = accAssets + value;
 
             totalAssetsLine.data = [
@@ -72,7 +71,6 @@ const OverviewChart = ({ isDashboard = false, view }) => {
 
         var accLiab = 0;
         for (const [key, value] of Object.entries(liabSorted)) {
-            console.log(key, value);
             accLiab = accLiab + value;
 
             totalLiabilitiesLine.data = [

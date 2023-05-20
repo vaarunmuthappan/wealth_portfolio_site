@@ -117,25 +117,6 @@ const BreakdownChart = ({ data, isDashboard = false }) => {
                     },
                 ]}
             />
-            {/* <Box
-                position="absolute"
-                top="50%"
-                left="50%"
-                color={theme.palette.secondary[400]}
-                textAlign="center"
-                pointerEvents="none"
-                sx={{
-                    transform: isDashboard
-                        ? "translate(-75%, -170%)"
-                        : "translate(-50%, -100%)",
-                }}
-            >
-                <Typography variant="h6">
-                    {!isDashboard && "Total:"} ${data.Total}
-                </Typography>
-            </Box> */}
-
-
         </Box>
     );
 };

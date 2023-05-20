@@ -14,10 +14,9 @@ import {
     AddCircleTwoTone,
 } from "@mui/icons-material";
 import Header from "../../components/Header";
-import { useGetUserByIdQuery } from './teamApiSlice'
+import { useGetUserByIdQuery, useUpdateUserMutation } from './teamApiSlice'
 import { useState, useEffect } from "react";
-import { store } from '../../app/store'
-import { useUpdateUserMutation } from './teamApiSlice'
+import { store } from '../../app/store';
 
 const EditUser = () => {
     const urlarr = window.location.pathname.split('/');
@@ -34,18 +33,17 @@ const EditUser = () => {
         firm: store.getState().auth.firm,
         role: "Employee",
         active: "Active",
-        roles: []
+        roles: [],
+        id: ""
     });
+    const [ErrMsg, setErrMsg] = useState("");
 
     const { data, error, isLoading, isSuccess, isError } = useGetUserByIdQuery(ID);
 
     useEffect(function effectFunction() {
-        if (isSuccess) {
-            setUser(data);
-        }
-    }, []);
+        setUser(data)
+    }, [data]);
 
-    const [ErrMsg, setErrMsg] = useState("")
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -56,9 +54,12 @@ const EditUser = () => {
         event.preventDefault();
 
         try {
-            console.log(user, ID)
-            const response = await editUser(user, ID).unwrap()
-            setErrMsg(response['message'])
+
+            const updateUser = { ...user, ["id"]: ID, ["roles"]: [user.role] };
+
+            const response = await editUser(updateUser).unwrap();
+
+            setErrMsg(response['message']);
 
         } catch (err) {
             if (!err?.originalStatus) {
@@ -100,7 +101,7 @@ const EditUser = () => {
                             id="firstName"
                             name="firstName"
                             label="First Name"
-                            value={user.firstName}
+                            value={user ? user.firstName : ""}
                             fullWidth
                             size="small"
                             autoComplete="off"
@@ -129,7 +130,7 @@ const EditUser = () => {
                             id="lastName"
                             name="lastName"
                             label="Last Name"
-                            value={user.lastName}
+                            value={user ? user.lastName : ""}
                             fullWidth
                             size="small"
                             autoComplete="off"
@@ -158,7 +159,7 @@ const EditUser = () => {
                             id="username"
                             name="username"
                             label="Username"
-                            value={user.username}
+                            value={user ? user.username : ""}
                             fullWidth
                             size="small"
                             autoComplete="off"
@@ -187,7 +188,7 @@ const EditUser = () => {
                             id="password"
                             name="password"
                             label="Password"
-                            value={user.password}
+                            value={user ? user.password : ""}
                             fullWidth
                             size="small"
                             autoComplete="off"
@@ -218,7 +219,7 @@ const EditUser = () => {
                                 fontWeight: 700
                             }}
                         >
-                            {user.firm}
+                            {user ? user.firm : ""}
                         </InputLabel>
                     </Grid>
                 </Box>
@@ -244,7 +245,7 @@ const EditUser = () => {
                                 labelId="role"
                                 id="role"
                                 name="role"
-                                value={user.role}
+                                value={user ? user.role : ""}
                                 label="Role"
                                 onChange={handleChange}
                             >
@@ -277,7 +278,7 @@ const EditUser = () => {
                                 labelId="active"
                                 id="active"
                                 name="active"
-                                value={user.active}
+                                value={user ? user.active : ""}
                                 label="Status"
                                 onChange={handleChange}
                             >

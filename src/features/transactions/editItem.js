@@ -16,7 +16,7 @@ import {
 import Header from "../../components/Header";
 import { useState, useEffect } from "react";
 import { store } from '../../app/store'
-import { useGetItemByIdQuery } from './transactionsApiSlice'
+import { useGetItemByIdQuery, useUpdateItemMutation } from './transactionsApiSlice'
 
 const EditItem = () => {
     const urlarr = window.location.pathname.split('/');
@@ -225,15 +225,11 @@ const EditItem = () => {
     });
 
     const { data, error, isLoading, isSuccess, isError } = useGetItemByIdQuery(ID);
+    const [editItem, { isLoadingUpdate }] = useUpdateItemMutation();
 
     useEffect(function effectFunction() {
-        if (isSuccess) {
-            setItem(data);
-            console.log(item, data, error, isLoading, isSuccess, isError)
-        }
-        setErrMsg(error)
-        // console.log(item, data, error, isLoading, isSuccess, isError)
-    }, []);
+        setItem(data)
+    }, [data]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -244,10 +240,11 @@ const EditItem = () => {
         event.preventDefault();
 
         try {
-            // setItem({ ...item, ["curPrice"]: item.price });
-            // const result = await addItem(item).unwrap() //CHECK LOGIN ENDPOINT IN SLICE
-            //setErrMsg(result['message'])
-            setErrMsg("To do")
+            const updatedItem = { ...item, ["curPrice"]: item.price, ["id"]: ID }
+
+            const result = await editItem(updatedItem).unwrap()
+
+            setErrMsg(result)
 
         } catch (err) {
             if (!err?.originalStatus) {
@@ -258,7 +255,7 @@ const EditItem = () => {
             } else if (err.originalStatus === 401) {
                 setErrMsg('Unauthorized');
             } else {
-                setErrMsg('Add User Failed');
+                setErrMsg('Add Item Failed');
             }
         }
     };
@@ -292,7 +289,7 @@ const EditItem = () => {
                             autoComplete="off"
                             variant="outlined"
                             onChange={handleChange}
-                            value={item.name}
+                            value={item ? item.name : ""}
                         />
                     </Grid>
 
@@ -314,7 +311,7 @@ const EditItem = () => {
                             labelId="category"
                             id="category"
                             name="category"
-                            value={item.category}
+                            value={item ? item.category : ""}
                             label="Category"
                             fullWidth
                             onChange={handleChange}
@@ -348,7 +345,7 @@ const EditItem = () => {
                             autoComplete="off"
                             variant="outlined"
                             onChange={handleChange}
-                            value={item.price}
+                            value={item ? item.price : ""}
                         />
                     </Grid>
 
@@ -371,7 +368,7 @@ const EditItem = () => {
                             labelId="currency"
                             id="currency"
                             name="currency"
-                            value={item.currency}
+                            value={item ? item.currency : ""}
                             fullWidth
                             label="Currency"
                             onChange={handleChange}
@@ -405,7 +402,7 @@ const EditItem = () => {
                             autoComplete="off"
                             variant="outlined"
                             onChange={handleChange}
-                            value={item.USDPrice}
+                            value={item ? item.USDPrice : ""}
                         />
                     </Grid>
 
@@ -432,7 +429,7 @@ const EditItem = () => {
                             autoComplete="off"
                             variant="outlined"
                             onChange={handleChange}
-                            value={item.quantity}
+                            value={item ? item.quantity : ""}
                         />
                     </Grid>
 
@@ -459,7 +456,7 @@ const EditItem = () => {
                             autoComplete="off"
                             variant="outlined"
                             onChange={handleChange}
-                            value={item.notes}
+                            value={item ? item.notes : ""}
                         />
                     </Grid>
 
