@@ -17,10 +17,12 @@ import {
     AddCircleTwoTone,
 } from "@mui/icons-material";
 import { useAddUserMutation } from './teamApiSlice'
+import { useNavigate } from "react-router-dom";
 
 const AddUser = () => {
     const theme = useTheme();
-    const [addUser, { isLoading }] = useAddUserMutation()
+    const [addUser, { isLoading }] = useAddUserMutation();
+    const navigate = useNavigate();
 
     const [user, setUser] = useState({
         firstName: "",
@@ -45,7 +47,7 @@ const AddUser = () => {
         try {
             const userData = await addUser(user).unwrap() //CHECK LOGIN ENDPOINT IN SLICE
 
-            setErrMsg(userData['success'])
+            navigate('/dash/team');
 
         } catch (err) {
             if (!err?.originalStatus) {

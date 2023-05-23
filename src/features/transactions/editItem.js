@@ -15,6 +15,7 @@ import {
 } from "@mui/icons-material";
 import Header from "../../components/Header";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { store } from '../../app/store'
 import { useGetItemByIdQuery, useUpdateItemMutation } from './transactionsApiSlice'
 
@@ -22,6 +23,7 @@ const EditItem = () => {
     const urlarr = window.location.pathname.split('/');
     const ID = urlarr.pop();
     const theme = useTheme();
+    const navigate = useNavigate();
 
     const currency_list = [
         { name: "US Dollar", code: "USD" },
@@ -244,7 +246,7 @@ const EditItem = () => {
 
             const result = await editItem(updatedItem).unwrap()
 
-            setErrMsg(result)
+            navigate('/dash/transactions');
 
         } catch (err) {
             if (!err?.originalStatus) {

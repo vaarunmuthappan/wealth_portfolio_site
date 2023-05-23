@@ -17,11 +17,13 @@ import Header from "../../components/Header";
 import { useGetUserByIdQuery, useUpdateUserMutation } from './teamApiSlice'
 import { useState, useEffect } from "react";
 import { store } from '../../app/store';
+import { useNavigate } from "react-router-dom";
 
 const EditUser = () => {
     const urlarr = window.location.pathname.split('/');
     const ID = urlarr.pop();
     const theme = useTheme();
+    const navigate = useNavigate();
 
     const [editUser, { isLoadingUpdate }] = useUpdateUserMutation()
 
@@ -59,7 +61,7 @@ const EditUser = () => {
 
             const response = await editUser(updateUser).unwrap();
 
-            setErrMsg(response['message']);
+            navigate('/dash/users');
 
         } catch (err) {
             if (!err?.originalStatus) {

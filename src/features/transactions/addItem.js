@@ -18,6 +18,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import { useNavigate } from "react-router-dom";
 
 import Header from "../../components/Header";
 import { useState } from "react";
@@ -26,6 +27,7 @@ import { useAddItemMutation } from './transactionsApiSlice'
 
 const AddItem = () => {
     const theme = useTheme();
+    const navigate = useNavigate()
     const [addItem, { isLoading }] = useAddItemMutation()
 
     const currency_list = [
@@ -208,7 +210,7 @@ const AddItem = () => {
         "Unlisted Assets",
         "Venture Capital",
         "Properties",
-        "Mortgage",
+        "Mortgage Loan",
         "Bank Borrowings"
     ]
 
@@ -241,7 +243,7 @@ const AddItem = () => {
             setItem({ item });
             const result = await addItem(item).unwrap() //CHECK LOGIN ENDPOINT IN SLICE
 
-            setErrMsg(result['message'])
+            navigate('/dash/transactions');
 
         } catch (err) {
             if (!err?.originalStatus) {

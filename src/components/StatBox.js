@@ -2,11 +2,11 @@ import React from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import FlexBetween from "./FlexBetween";
 
-const StatBox = ({ title, value, increase, icon, description }) => {
+const StatBox = ({ title, value, increase, icon, description, bold, gridColumn }) => {
     const theme = useTheme();
     return (
         <Box
-            gridColumn="span 2"
+            gridColumn={gridColumn}
             gridRow="span 1"
             display="flex"
             flexDirection="column"
@@ -17,9 +17,16 @@ const StatBox = ({ title, value, increase, icon, description }) => {
             borderRadius="0.55rem"
         >
             <FlexBetween>
-                <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-                    {title}
-                </Typography>
+                {bold ?
+                    <Typography variant="h3" sx={{ color: theme.palette.secondary[100], fontWeight: 'bold', m: 1 }}>
+                        {title}
+                    </Typography>
+
+                    :
+                    <Typography variant="h3" sx={{ color: theme.palette.secondary[100] }}>
+                        {title}
+                    </Typography>
+                }
                 {icon}
             </FlexBetween>
 

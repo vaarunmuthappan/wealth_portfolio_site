@@ -52,7 +52,7 @@ const Overview = () => {
         Total: breakdownData.data?.liabTot.sum || 0,
         Categories: breakdownData.data?.liabCat || []
     };
-    const netValue = assetData.Total - liabilityData.Total
+    const netValue = `${assetData.Total - liabilityData.Total} USD`;
 
     const columns = [
         {
@@ -111,7 +111,7 @@ const Overview = () => {
             ((imgProperties.height * pdfWidth) / imgProperties.width) - 10;
 
         pdf.addImage(data, 'PNG', 5, 0, pdfWidth, pdfHeight);
-        pdf.save('Overview.pdf');
+        pdf.save(`${authStore.firm} Overview.pdf`);
     };
 
     const content = (
@@ -151,8 +151,10 @@ const Overview = () => {
 
                     {/* ROW 1 */}
                     <StatBox
-                        title="Portfolio Net Worth"
+                        title="Net Worth"
+                        gridColumn="span 6"
                         value={data && netValue}
+                        bold={true}
                         // increase="+14%"
                         // description="Since last month"
                         icon={
@@ -161,19 +163,9 @@ const Overview = () => {
                             />
                         }
                     />
-                    <StatBox
-                        title="Total Employees"
-                        value={data && data.totalEmployees}
-                        // increase="+21%"
-                        // description="Since last month"
-                        icon={
-                            <BadgeTwoTone
-                                sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-                            />
-                        }
-                    />
+
                     <Box
-                        gridColumn="span 8"
+                        gridColumn="span 6"
                         gridRow="span 2"
                         backgroundColor={theme.palette.background.alt}
                         p="1rem"
@@ -184,6 +176,7 @@ const Overview = () => {
                     </Box>
                     <StatBox
                         title="Total Assets"
+                        gridColumn="span 3"
                         value={data && assetData.Total}
                         // increase="+5%"
                         // description="Since last month"
@@ -195,6 +188,7 @@ const Overview = () => {
                     />
                     <StatBox
                         title="Total Liabilites"
+                        gridColumn="span 3"
                         value={data && liabilityData.Total}
                         // increase="+43%"
                         // description="Since last month"
@@ -243,44 +237,6 @@ const Overview = () => {
                             Breakdown of liabilities by sub-category.
                         </Typography>
                         <BreakdownChart data={liabilityData} />
-                    </Box>
-
-                    {/* ROW 3 */}
-                    <Box
-                        gridColumn="span 12"
-                        gridRow="span 3"
-                        sx={{
-                            "& .MuiDataGrid-root": {
-                                border: "none",
-                                borderRadius: "0.55rem",
-                            },
-                            "& .MuiDataGrid-cell": {
-                                borderBottom: "none",
-                            },
-                            "& .MuiDataGrid-columnHeaders": {
-                                backgroundColor: theme.palette.background.alt,
-                                color: theme.palette.secondary[100],
-                                borderBottom: "none",
-                            },
-                            "& .MuiDataGrid-virtualScroller": {
-                                backgroundColor: theme.palette.background.alt,
-                            },
-                            "& .MuiDataGrid-footerContainer": {
-                                backgroundColor: theme.palette.background.alt,
-                                color: theme.palette.secondary[100],
-                                borderTop: "none",
-                            },
-                            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                                color: `${theme.palette.secondary[200]} !important`,
-                            },
-                        }}
-                    >
-                        <DataGrid
-                            loading={isLoading || !data}
-                            getRowId={(row) => row._id}
-                            rows={(data && data.transactions) || []}
-                            columns={columns}
-                        />
                     </Box>
                 </Box>
             </div>
