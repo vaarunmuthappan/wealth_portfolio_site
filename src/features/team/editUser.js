@@ -61,7 +61,7 @@ const EditUser = () => {
 
             const response = await editUser(updateUser).unwrap();
 
-            navigate('/dash/users');
+            navigate('/dash/team');
 
         } catch (err) {
             if (!err?.originalStatus) {
