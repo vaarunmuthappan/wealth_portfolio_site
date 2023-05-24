@@ -16,8 +16,6 @@ import {
 // import { MuiPickersUtilsProvider, DatePicker } from '@mui/material-ui-pickers'
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs from 'dayjs';
 import { useNavigate } from "react-router-dom";
 
 import Header from "../../components/Header";
@@ -222,12 +220,9 @@ const AddItem = () => {
         category: "",
         notes: "",
         price: 0,
-        curPrice: 0, //
-        USDPrice: 0, //TODO: for now set to null
+        USDPrice: 0,
         currency: "USD",
-        quantity: 0,
-        date: dateToday.toISOString().substring(0, 16), //
-        soldDate: null,
+        quantity: 0
     });
     const [ErrMsg, setErrMsg] = useState("")
 
@@ -331,7 +326,7 @@ const AddItem = () => {
                                     fontWeight: 700
                                 }}
                             >
-                                Initial Value (Total)
+                                Total Market Cap
                             </InputLabel>
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -340,31 +335,6 @@ const AddItem = () => {
                                 id="price"
                                 name="price"
                                 label="Initial Value"
-                                fullWidth
-                                size="small"
-                                autoComplete="off"
-                                variant="outlined"
-                                onChange={handleChange}
-                            />
-                        </Grid>
-
-                        {/* Current Price */}
-                        <Grid item xs={12} sm={2}>
-                            <InputLabel
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    fontWeight: 700
-                                }}
-                            >
-                                Current Value (Total)
-                            </InputLabel>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                id="curPrice"
-                                name="curPrice"
-                                label="Current Value"
                                 fullWidth
                                 size="small"
                                 autoComplete="off"
@@ -412,7 +382,7 @@ const AddItem = () => {
                                     fontWeight: 700
                                 }}
                             >
-                                US Dollar Value (Total)
+                                Total Market Cap (USD)
                             </InputLabel>
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -478,59 +448,6 @@ const AddItem = () => {
                                 autoComplete="off"
                                 variant="outlined"
                                 onChange={handleChange}
-                            />
-                        </Grid>
-
-                        {/* Date of Purchase */}
-                        <Grid item xs={12} sm={2}>
-                            <InputLabel
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    fontWeight: 700
-                                }}
-                            >
-                                Date of Purchase
-                            </InputLabel>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <DatePicker
-                                id="date"
-                                name="date"
-                                type="date"
-                                required
-                                label="Date of Purchase"
-                                fullWidth
-                                size="small"
-                                variant="outlined"
-                                value={dayjs(item.date)}
-                                onChange={date => handleChange({ target: { value: date, name: 'date' } })}
-                            />
-                        </Grid>
-
-                        {/* Date Sold */}
-                        <Grid item xs={12} sm={2}>
-                            <InputLabel
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    fontWeight: 700
-                                }}
-                            >
-                                Date Sold
-                            </InputLabel>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <DatePicker
-                                id="soldDate"
-                                name="soldDate"
-                                type="date"
-                                label="Date Sold"
-                                fullWidth
-                                size="small"
-                                // variant="outlined"
-                                value={dayjs(item.soldDate)}
-                                onChange={date => handleChange({ target: { value: date, name: 'date' } })}
                             />
                         </Grid>
 

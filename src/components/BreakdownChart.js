@@ -17,10 +17,10 @@ const BreakdownChart = ({ data, isDashboard = false }) => {
         theme.palette.secondary[500],
     ];
     const formattedData = Object.entries(data.Categories).map(
-        ([category, sales], i) => ({
+        ([category, amount], i) => ({
             id: category,
             label: category,
-            value: sales,
+            value: amount,
             color: colors[i],
         })
     );
@@ -62,11 +62,6 @@ const BreakdownChart = ({ data, isDashboard = false }) => {
                             fill: theme.palette.secondary[200],
                         },
                     },
-                    tooltip: {
-                        container: {
-                            color: theme.palette.primary.main,
-                        },
-                    },
                 }}
                 colors={{ datum: "data.color" }}
                 margin={
@@ -82,11 +77,29 @@ const BreakdownChart = ({ data, isDashboard = false }) => {
                     from: "color",
                     modifiers: [["darker", 0.2]],
                 }}
-                enableArcLinkLabels={!isDashboard}
+                enableArcLinkLabels={true}
+                enableArcLabels={false}
                 arcLinkLabelsTextColor={theme.palette.secondary[200]}
                 arcLinkLabelsThickness={2}
                 arcLinkLabelsColor={{ from: "color" }}
                 arcLabelsSkipAngle={10}
+
+                tooltip={point => {
+                    point.datum.formattedValue = `${new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        maximumFractionDigits: 0,
+                    }).format(point.datum.data.value)}`;
+                    return <div
+                        style={{
+                            background: 'white',
+                            padding: '3px 6px',
+                            border: '1px solid #ccc',
+                        }}
+                    >
+                        <div>{point.datum.id}: {point.datum.formattedValue}</div>
+                    </div>;
+                }}
                 arcLabelsTextColor={{
                     from: "color",
                     modifiers: [["darker", 2]],

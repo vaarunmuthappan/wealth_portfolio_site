@@ -52,10 +52,14 @@ const Transactions = () => {
             flex: 1,
         },
         {
-            field: "price",
-            headerName: "Initial Price",
+            field: "USDPrice",
+            headerName: "Price",
             flex: 1,
-            renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
+            renderCell: (params) => `${new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                maximumFractionDigits: 0,
+            }).format(params.value)}`,
         },
         {
             field: "quantity",
@@ -63,25 +67,9 @@ const Transactions = () => {
             flex: 1,
         },
         {
-            field: "curPrice",
-            headerName: "Current Price",
-            flex: 1,
-            renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
-        },
-        {
-            field: "date",
-            headerName: "Data Acquired",
-            flex: 1,
-        },
-        {
             field: "notes",
             headerName: "Notes",
             flex: 1,
-        },
-        {
-            field: "soldDate",
-            headerName: "Date Sold",
-            flex: 0.5,
         },
         {
             field: "actions",
@@ -113,7 +101,7 @@ const Transactions = () => {
     return (
         <Box m="1.5rem 2.5rem">
             <FlexBetween>
-                <Header title="TRANSACTIONS" subtitle="Entire list of transactions" />
+                <Header title="TRANSACTIONS" subtitle="Transactions in USD" />
                 <Box>
                     <Button
                         onClick={() => {

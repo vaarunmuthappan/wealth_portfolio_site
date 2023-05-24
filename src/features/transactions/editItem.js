@@ -218,12 +218,9 @@ const EditItem = () => {
         category: "",
         notes: "",
         price: 0,
-        curPrice: 0,
         USDPrice: 0,
         currency: "USD",
-        quantity: 0,
-        date: dateToday.toISOString().substring(0, 16),
-        soldDate: dateToday.toISOString().substring(0, 16)
+        quantity: 0
     });
 
     const { data, error, isLoading, isSuccess, isError } = useGetItemByIdQuery(ID);
@@ -242,7 +239,7 @@ const EditItem = () => {
         event.preventDefault();
 
         try {
-            const updatedItem = { ...item, ["curPrice"]: item.price, ["id"]: ID }
+            const updatedItem = { ...item, ["id"]: ID }
 
             const result = await editItem(updatedItem).unwrap()
 
@@ -461,35 +458,6 @@ const EditItem = () => {
                             value={item ? item.notes : ""}
                         />
                     </Grid>
-
-                    {/* Date of Purchase */}
-                    {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <Grid item xs={12} sm={2}>
-                            <InputLabel
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    fontWeight: 700
-                                }}
-                            >
-                                Date of Purchase
-                            </InputLabel>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <DatePicker
-                                required
-                                id="date"
-                                name="date"
-                                label="Date of Purchase"
-                                fullWidth
-                                size="small"
-                                variant="outlined"
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                    </MuiPickersUtilsProvider> */}
-
-                    {/* Date Sold */}
 
                     {/* Error Message */}
                     <Box m="5rem">
