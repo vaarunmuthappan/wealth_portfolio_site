@@ -5,6 +5,7 @@ import Header from "../../components/Header";
 import { DataGrid } from "@mui/x-data-grid";
 import FlexBetween from "../../components/FlexBetween";
 import { useNavigate } from "react-router-dom";
+import { store } from '../../app/store'
 import {
     AddCircleTwoTone,
 } from "@mui/icons-material";
@@ -16,7 +17,8 @@ const TeamList = () => {
     const { data, isLoading } = useGetTeamQuery();
 
     const navigate = useNavigate();
-    const [deleteUser, { isDeleted }] = useDeleteUserMutation()
+    const [deleteUser, { isDeleted }] = useDeleteUserMutation();
+    const adminStore = store.getState().auth;
 
     const onEdit = (e, row) => {
         navigate(`editUser/${row._id}`);
@@ -61,22 +63,27 @@ const TeamList = () => {
             field: "actions",
             headerName: "",
             renderCell: (params) => {
-                return (
-                    <Box>
-                        <Button
-                            onClick={(e) => onEdit(e, params.row)}
-                            variant="contained"
-                        >
-                            Edit
-                        </Button>
-                        <Button
-                            onClick={(e) => onDelete(e, params.row)}
-                            variant="contained"
-                        >
-                            Delete
-                        </Button>
-                    </Box>
-                );
+                if (adminStore.role == "Employee") {
+                    return <div>No action available.</div>
+                }
+                else {
+                    return (
+                        <Box>
+                            <Button
+                                onClick={(e) => onEdit(e, params.row)}
+                                variant="contained"
+                            >
+                                Edit
+                            </Button>
+                            <Button
+                                onClick={(e) => onDelete(e, params.row)}
+                                variant="contained"
+                            >
+                                Delete
+                            </Button>
+                        </Box>
+                    );
+                }
             },
             flex: 1.5,
         }

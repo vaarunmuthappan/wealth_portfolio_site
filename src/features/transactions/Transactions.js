@@ -6,6 +6,7 @@ import Header from "../../components/Header";
 import DataGridCustomToolbar from "../../components/DataGridCustomToolbar";
 import FlexBetween from "../../components/FlexBetween";
 import { useNavigate } from "react-router-dom";
+import { store } from '../../app/store'
 import {
     AddCircleTwoTone,
 } from "@mui/icons-material";
@@ -19,6 +20,7 @@ const Transactions = () => {
     const [pageSize, setPageSize] = useState(20);
     const [sort, setSort] = useState({});
     const [search, setSearch] = useState("");
+    const adminStore = store.getState().auth;
 
     const [searchInput, setSearchInput] = useState("");
 
@@ -40,7 +42,7 @@ const Transactions = () => {
         search,
     });
 
-    const columns = [
+    var columns = [
         {
             field: "name",
             headerName: "Name",
@@ -75,22 +77,27 @@ const Transactions = () => {
             field: "actions",
             headerName: "",
             renderCell: (params) => {
-                return (
-                    <Box>
-                        <Button
-                            onClick={(e) => onEdit(e, params.row)}
-                            variant="contained"
-                        >
-                            Edit
-                        </Button>
-                        <Button
-                            onClick={(e) => onDelete(e, params.row)}
-                            variant="contained"
-                        >
-                            Delete
-                        </Button>
-                    </Box>
-                );
+                if (adminStore.role == "Employee") {
+                    return <div>No action available.</div>
+                }
+                else {
+                    return (
+                        <Box>
+                            <Button
+                                onClick={(e) => onEdit(e, params.row)}
+                                variant="contained"
+                            >
+                                Edit
+                            </Button>
+                            <Button
+                                onClick={(e) => onDelete(e, params.row)}
+                                variant="contained"
+                            >
+                                Delete
+                            </Button>
+                        </Box>
+                    );
+                }
             },
             flex: 1,
         }

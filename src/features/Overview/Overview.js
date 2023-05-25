@@ -11,14 +11,11 @@ import {
     Button,
     Typography,
     useTheme,
-    TextField,
-    InputLabel,
     MenuItem,
     Grid,
     Select,
     useMediaQuery,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
@@ -27,10 +24,7 @@ import { selectCurrentToken } from "../auth/authSlice"
 
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
-import OverviewChart from "../../components/OverviewChart";
 import BreakdownChart from "../../components/BreakdownChart";
-import { useGetOverviewQuery } from "./overviewApiSlice";
-import { useGetBreakdownQuery } from '../breakdown/breakdownApiSlice'
 import StatBox from "../../components/StatBox";
 
 const Overview = () => {
@@ -43,8 +37,6 @@ const Overview = () => {
 
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
-
-    const { data, isLoading } = useGetOverviewQuery();
 
     const [assetData, setAssetData] = useState({
         Total: 0,

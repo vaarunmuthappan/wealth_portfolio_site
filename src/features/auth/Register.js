@@ -48,13 +48,10 @@ export default function Register() {
         const firstName = data.get('firstName');
         const lastName = data.get('lastName')
         try {
-            const userData = await register({ user, pwd, firm, firstName, lastName }).unwrap()
-
-            console.log("state", userData)
+            const userData = await register({ user, pwd, firm, firstName, lastName }).unwrap();
 
             setErrMsg(userData.success);
         } catch (err) {
-            console.log(err.originalStatus)
             if (!err?.originalStatus) {
                 // isLoading: true until timeout occurs
                 setErrMsg('No Server Response');
