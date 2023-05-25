@@ -4,6 +4,7 @@ import FlexBetween from "./FlexBetween";
 
 const StatBox = ({ title, value, increase, icon, description, bold, gridColumn }) => {
     const theme = useTheme();
+    if (!value) return "Loading";
     return (
         <Box
             gridColumn={gridColumn}

@@ -22,6 +22,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import { useSelector } from "react-redux"
+import { selectCurrentToken } from "../auth/authSlice"
 
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
@@ -44,40 +46,56 @@ const Overview = () => {
 
     const { data, isLoading } = useGetOverviewQuery();
 
-    const breakdownData = useGetBreakdownQuery();
-
-    var assetData = {
-        Total: breakdownData.data?.assetTotal.sum || 0,
-        Categories: breakdownData.data?.assetCat || []
-    };
-    var liabilityData = {
-        Total: breakdownData.data?.liabTot.sum || 0,
-        Categories: breakdownData.data?.liabCat || []
-    };
-
-    var netUSD = breakdownData.data?.assetTotal.sum - breakdownData.data?.liabTot.sum;
-    const [netHeader, setNetHeader] = useState(`${new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: selectedCurr,
-        maximumFractionDigits: 0,
-    }).format(netUSD)}`);
-    const [assetText, setAssetText] = useState(`${new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: selectedCurr,
-        maximumFractionDigits: 0,
-    }).format(breakdownData.data?.assetTotal.sum || 0)}`);
-    const [liabText, setliabText] = useState(`${new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: selectedCurr,
-        maximumFractionDigits: 0,
-    }).format(breakdownData.data?.liabTot.sum || 0)}`);
-
-    const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: selectedCurr,
-        maximumFractionDigits: 0,
+    const [assetData, setAssetData] = useState({
+        Total: 0,
+        Categories: []
     });
+    const [liabilityData, setLiabilityData] = useState({
+        Total: 0,
+        Categories: []
+    });
+    const [assetText, setAssetText] = useState("Loading...");
+    const [liabText, setliabText] = useState("Loading...");
+    const [netHeader, setNetHeader] = useState("Loading...");
 
+    const [netUSD, setNetUSD] = useState(liabilityData.Total + assetData.Total);
+    const token = useSelector(selectCurrentToken)
+    useEffect(() => {
+        async function fetchData() {
+            // You can await here
+            const response = await axios.get(`https://wealth-portfolio-api.onrender.com/assets/breakdown/${store.getState().auth.firm}`,
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + token //the token is a variable which holds the token
+                    }
+                });
+            setAssetData({
+                Total: response.data.assetTotal.sum,
+                Categories: response.data.assetCat
+            });
+            setLiabilityData({
+                Total: response.data.liabTot.sum,
+                Categories: response.data.liabCat
+            });
+            setNetUSD(response.data.assetTotal.sum + response.data.liabTot.sum);
+            setAssetText(`${new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: selectedCurr,
+                maximumFractionDigits: 0,
+            }).format(response.data.assetTotal.sum)}`);
+            setliabText(`${new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: selectedCurr,
+                maximumFractionDigits: 0,
+            }).format(response.data.liabTot.sum)}`);
+            setNetHeader(`${new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: selectedCurr,
+                maximumFractionDigits: 0,
+            }).format(response.data.assetTotal.sum + response.data.liabTot.sum)}`);
+        }
+        fetchData();
+    }, [])
 
     const currency_list = [
         { name: "US Dollar", code: "USD" },
@@ -250,35 +268,6 @@ const Overview = () => {
         { name: "Zimbabwean dollar", code: "ZWL" }
     ];
 
-    const columns = [
-        {
-            field: "name",
-            headerName: "Name",
-            flex: 1,
-        },
-        {
-            field: "category",
-            headerName: "Category",
-            flex: 1,
-        },
-        {
-            field: "price",
-            headerName: "Price",
-            flex: 1,
-            renderCell: (params) => `$${Number(params.value).toFixed(0)}`,
-        },
-        {
-            field: "quantity",
-            headerName: "Initial Quantity",
-            flex: 1,
-        },
-        {
-            field: "notes",
-            headerName: "Notes",
-            flex: 1,
-        },
-    ];
-
     const handleDownloadPdf = async () => {
         const element = printRef.current;
         const canvas = await html2canvas(element);
@@ -300,17 +289,20 @@ const Overview = () => {
                 style: 'currency',
                 currency: 'USD',
                 maximumFractionDigits: 0,
-            }).format(netUSD)}`);
+            }).format(assetData.Total + liabilityData.Total)}`);
+
             setAssetText(`${new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD',
                 maximumFractionDigits: 0,
-            }).format(assetData.Total)}`)
+            }).format(assetData.Total)}`);
+
             setliabText(`${new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD',
                 maximumFractionDigits: 0,
-            }).format(liabilityData.Total)}`)
+            }).format(liabilityData.Total)}`);
+
             setSelectedCurr("USD");
         }
         else {
@@ -324,7 +316,6 @@ const Overview = () => {
             let liabResponse = axios.get(`https://api.currencybeacon.com/v1/convert?api_key=${APIkey}&from=USD&to=${ssc}&amount=${liabilityData.Total}`);
 
             await Promise.allSettled([netResponse, assetResponse, liabResponse]).then((values) => {
-
                 setNetHeader(`${new Intl.NumberFormat('en-US', {
                     style: 'currency',
                     currency: ssc,
@@ -335,7 +326,8 @@ const Overview = () => {
                     style: 'currency',
                     currency: ssc,
                     maximumFractionDigits: 0,
-                }).format(values[1].value.data.response.value)}`);
+                }).format(values[1].value.data.response.value)
+                    } `);
 
                 setliabText(`${new Intl.NumberFormat('en-US', {
                     style: 'currency',
@@ -371,7 +363,7 @@ const Overview = () => {
 
             <div ref={printRef}>
                 <FlexBetween>
-                    <Header title={`Welcome ${authStore.user}`} subtitle="Welcome to your dashboard" />
+                    <Header title={`Welcome ${authStore.user} `} subtitle="Welcome to your dashboard" />
                     <Box>
                         <Grid item fullWidth xs={1} sm={1}>
                             <Select
@@ -406,7 +398,7 @@ const Overview = () => {
                     <StatBox
                         title="Net Worth"
                         gridColumn="span 6"
-                        value={breakdownData && netHeader}
+                        value={netHeader}
                         bold={true}
                         // increase="+14%"
                         // description="Since last month"
@@ -419,7 +411,7 @@ const Overview = () => {
                     <StatBox
                         title="Total Assets"
                         gridColumn="span 3"
-                        value={breakdownData && assetText}
+                        value={assetText}
                         // increase="+5%"
                         // description="Since last month"
                         icon={
@@ -431,7 +423,7 @@ const Overview = () => {
                     <StatBox
                         title="Total Liabilites"
                         gridColumn="span 3"
-                        value={breakdownData && liabText}
+                        value={liabText}
                         // increase="+43%"
                         // description="Since last month"
                         icon={
@@ -485,6 +477,6 @@ const Overview = () => {
         </Box>
     )
 
-    return content
+    return content;
 }
 export default Overview
