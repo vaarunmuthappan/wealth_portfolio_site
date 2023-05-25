@@ -18,8 +18,16 @@ const Breakdown = () => {
         Categories: data.data?.liabCat || []
     };
 
-    const assetSubTitle = `Total Assets: ${assetData.Total}`
-    const liabSubTitle = `Total Liabilities: ${liabilityData.Total}`
+    const assetSubTitle = `Total Assets: ${new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0,
+    }).format(assetData.Total)}`;
+    const liabSubTitle = `Total Liabilities: ${new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0,
+    }).format(liabilityData.Total)}`
 
     return (
         <Box m="1.5rem 2.5rem">

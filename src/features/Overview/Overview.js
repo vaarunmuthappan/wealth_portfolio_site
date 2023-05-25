@@ -44,7 +44,8 @@ const Overview = () => {
 
     const { data, isLoading } = useGetOverviewQuery();
 
-    const breakdownData = useGetBreakdownQuery()
+    const breakdownData = useGetBreakdownQuery();
+
     var assetData = {
         Total: breakdownData.data?.assetTotal.sum || 0,
         Categories: breakdownData.data?.assetCat || []
@@ -54,26 +55,26 @@ const Overview = () => {
         Categories: breakdownData.data?.liabCat || []
     };
 
-    var netUSD = assetData.Total - liabilityData.Total;
+    var netUSD = breakdownData.data?.assetTotal.sum - breakdownData.data?.liabTot.sum;
     const [netHeader, setNetHeader] = useState(`${new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency: selectedCurr,
         maximumFractionDigits: 0,
     }).format(netUSD)}`);
     const [assetText, setAssetText] = useState(`${new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency: selectedCurr,
         maximumFractionDigits: 0,
-    }).format(assetData.Total)}`);
+    }).format(breakdownData.data?.assetTotal.sum || 0)}`);
     const [liabText, setliabText] = useState(`${new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency: selectedCurr,
         maximumFractionDigits: 0,
-    }).format(liabilityData.Total)}`);
+    }).format(breakdownData.data?.liabTot.sum || 0)}`);
 
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency: selectedCurr,
         maximumFractionDigits: 0,
     });
 
@@ -323,7 +324,7 @@ const Overview = () => {
             let liabResponse = axios.get(`https://api.currencybeacon.com/v1/convert?api_key=${APIkey}&from=USD&to=${ssc}&amount=${liabilityData.Total}`);
 
             await Promise.allSettled([netResponse, assetResponse, liabResponse]).then((values) => {
-                console.log(values.data, values);
+
                 setNetHeader(`${new Intl.NumberFormat('en-US', {
                     style: 'currency',
                     currency: ssc,
@@ -405,7 +406,7 @@ const Overview = () => {
                     <StatBox
                         title="Net Worth"
                         gridColumn="span 6"
-                        value={data && netHeader}
+                        value={breakdownData && netHeader}
                         bold={true}
                         // increase="+14%"
                         // description="Since last month"
@@ -418,7 +419,7 @@ const Overview = () => {
                     <StatBox
                         title="Total Assets"
                         gridColumn="span 3"
-                        value={data && assetText}
+                        value={breakdownData && assetText}
                         // increase="+5%"
                         // description="Since last month"
                         icon={
@@ -430,7 +431,7 @@ const Overview = () => {
                     <StatBox
                         title="Total Liabilites"
                         gridColumn="span 3"
-                        value={data && liabText}
+                        value={breakdownData && liabText}
                         // increase="+43%"
                         // description="Since last month"
                         icon={
