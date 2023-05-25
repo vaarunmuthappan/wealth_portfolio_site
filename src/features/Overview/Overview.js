@@ -69,7 +69,7 @@ const Overview = () => {
                 Total: response.data.liabTot.sum,
                 Categories: response.data.liabCat
             });
-            setNetUSD(response.data.assetTotal.sum + response.data.liabTot.sum);
+            setNetUSD(response.data.assetTotal.sum - response.data.liabTot.sum);
             setAssetText(`${new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: selectedCurr,
@@ -84,7 +84,7 @@ const Overview = () => {
                 style: 'currency',
                 currency: selectedCurr,
                 maximumFractionDigits: 0,
-            }).format(response.data.assetTotal.sum + response.data.liabTot.sum)}`);
+            }).format(response.data.assetTotal.sum - response.data.liabTot.sum)}`);
         }
         fetchData();
     }, [])
@@ -281,7 +281,7 @@ const Overview = () => {
                 style: 'currency',
                 currency: 'USD',
                 maximumFractionDigits: 0,
-            }).format(assetData.Total + liabilityData.Total)}`);
+            }).format(assetData.Total - liabilityData.Total)}`);
 
             setAssetText(`${new Intl.NumberFormat('en-US', {
                 style: 'currency',
