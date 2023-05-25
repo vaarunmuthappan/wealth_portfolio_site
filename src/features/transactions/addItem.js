@@ -17,6 +17,7 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import Header from "../../components/Header";
 import { useState } from "react";
@@ -216,7 +217,7 @@ const AddItem = () => {
     const [item, setItem] = useState({
         firm: store.getState().auth.firm,
         name: "",
-        BStype: "",  //to add
+        BStype: "",
         category: "",
         notes: "",
         price: 0,
@@ -235,14 +236,26 @@ const AddItem = () => {
         event.preventDefault();
 
         try {
-            setItem({ item });
-            const result = await addItem(item).unwrap() //CHECK LOGIN ENDPOINT IN SLICE
-
-            navigate('/dash/transactions');
+            if (item.currency == "USD") {
+                const newItem = { ...item, ["USDPrice"]: item.price };
+                const result = addItem(newItem).unwrap();
+                navigate('/dash/transactions');
+            }
+            else {
+                var APIkey = "c74b84f35c15803fdcc331fcaab1f919";
+                let USDPriceResponse = axios.get(`https://api.currencybeacon.com/v1/convert?api_key=${APIkey}&from=${item.currency}&to=USD&amount=${item.price}`);
+                await Promise.allSettled([USDPriceResponse]).then((values) => {
+                    console.log("non usd inside", values[0].value.data.response.value);
+                    setItem({ ...item, ["USDPrice"]: values[0].value.data.response.value });
+                    const result = addItem(item).unwrap();
+                    navigate('/dash/transactions');
+                })
+            }
 
         } catch (err) {
             if (!err?.originalStatus) {
                 // isLoading: true until timeout occurs
+                console.log(err)
                 setErrMsg('No Server Response');
             } else if (err.originalStatus === 400) {
                 setErrMsg('Missing Username or Password');
@@ -371,32 +384,6 @@ const AddItem = () => {
                                     <MenuItem value={citem.code}>{citem.name}</MenuItem>
                                 ))}
                             </Select>
-                        </Grid>
-
-                        {/* USD Price */}
-                        <Grid item xs={12} sm={2}>
-                            <InputLabel
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    fontWeight: 700
-                                }}
-                            >
-                                Total Market Cap (USD)
-                            </InputLabel>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-
-                                id="USDPrice"
-                                name="USDPrice"
-                                label="USD Price"
-                                fullWidth
-                                size="small"
-                                autoComplete="off"
-                                variant="outlined"
-                                onChange={handleChange}
-                            />
                         </Grid>
 
                         {/* Quantity */}
