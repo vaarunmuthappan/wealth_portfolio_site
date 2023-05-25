@@ -245,7 +245,6 @@ const AddItem = () => {
                 var APIkey = "c74b84f35c15803fdcc331fcaab1f919";
                 let USDPriceResponse = axios.get(`https://api.currencybeacon.com/v1/convert?api_key=${APIkey}&from=${item.currency}&to=USD&amount=${item.price}`);
                 await Promise.allSettled([USDPriceResponse]).then((values) => {
-                    console.log("non usd inside", values[0].value.data.response.value);
                     setItem({ ...item, ["USDPrice"]: values[0].value.data.response.value });
                     const result = addItem(item).unwrap();
                     navigate('/dash/transactions');

@@ -18,6 +18,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { store } from '../../app/store'
 import { useGetItemByIdQuery, useUpdateItemMutation } from './transactionsApiSlice'
+import axios from "axios";
 
 const EditItem = () => {
     const urlarr = window.location.pathname.split('/');
@@ -239,11 +240,20 @@ const EditItem = () => {
         event.preventDefault();
 
         try {
-            const updatedItem = { ...item, ["id"]: ID }
-
-            const result = await editItem(updatedItem).unwrap()
-
-            navigate('/dash/transactions');
+            if (item.currency == "USD") {
+                const newItem = { ...item, ["USDPrice"]: item.price, ["id"]: ID };
+                const result = editItem(newItem).unwrap();
+                navigate('/dash/transactions');
+            }
+            else {
+                var APIkey = "c74b84f35c15803fdcc331fcaab1f919";
+                let USDPriceResponse = axios.get(`https://api.currencybeacon.com/v1/convert?api_key=${APIkey}&from=${item.currency}&to=USD&amount=${item.price}`);
+                await Promise.allSettled([USDPriceResponse]).then((values) => {
+                    const newItem = { ...item, ["USDPrice"]: values[0].value.data.response.value, ["id"]: ID };
+                    const result = editItem(newItem).unwrap();
+                    navigate('/dash/transactions');
+                })
+            }
 
         } catch (err) {
             if (!err?.originalStatus) {
@@ -376,33 +386,6 @@ const EditItem = () => {
                                 <MenuItem value={citem.code}>{citem.name}</MenuItem>
                             ))}
                         </Select>
-                    </Grid>
-
-                    {/* USD Price */}
-                    <Grid item xs={12} sm={2}>
-                        <InputLabel
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                fontWeight: 700
-                            }}
-                        >
-                            US Dollar Value (Total)
-                        </InputLabel>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            id="USDPrice"
-                            name="USDPrice"
-                            label="USD Value"
-                            fullWidth
-                            size="small"
-                            autoComplete="off"
-                            variant="outlined"
-                            onChange={handleChange}
-                            value={item ? item.USDPrice : ""}
-                        />
                     </Grid>
 
                     {/* Quantity */}
