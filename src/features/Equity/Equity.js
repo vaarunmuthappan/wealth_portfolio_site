@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, useTheme, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useGetTransactionsQuery, useDeleteItemMutation } from "./transactionsApiSlice";
 import Header from "../../components/Header";
 import DataGridCustomToolbar from "../../components/DataGridCustomToolbar";
 import FlexBetween from "../../components/FlexBetween";
 import { useNavigate } from "react-router-dom";
-import { store } from '../../app/store'
+import { store } from '../../app/store';
+import axios from "axios";
 import {
     AddCircleTwoTone,
 } from "@mui/icons-material";
+import { useGetEquitiesQuery } from "./equityApiSlice";
 
-const Transactions = () => {
+const Equity = () => {
     const theme = useTheme();
 
     // values to be sent to the backend
@@ -24,22 +25,26 @@ const Transactions = () => {
     const [searchInput, setSearchInput] = useState("");
 
     const navigate = useNavigate();
-    const [deleteItem, { isDeleted }] = useDeleteItemMutation()
 
     const onEdit = (e, row) => {
         navigate(`editItem/${row._id}`);
     }
 
-    const onDelete = (e, row) => {
-        deleteItem(row._id);
-    }
-
-    const { data, isLoading } = useGetTransactionsQuery({
+    const { data, isLoading } = useGetEquitiesQuery({
         page,
         pageSize,
         sort: JSON.stringify(sort),
         search,
     });
+
+    const [viewData, setViewData] = useState({
+        total: 0,
+        transactions: []
+    });
+    var edit = {
+        total: data.total,
+        transactions: [...data.transactions]
+    };
 
     var columns = [
         {
@@ -55,6 +60,16 @@ const Transactions = () => {
         {
             field: "USDPrice",
             headerName: "Price",
+            flex: 1,
+            renderCell: (params) => `${new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                maximumFractionDigits: 0,
+            }).format(params.value)}`,
+        },
+        {
+            field: "curPrice",
+            headerName: "Current Price",
             flex: 1,
             renderCell: (params) => `${new Intl.NumberFormat('en-US', {
                 style: 'currency',
@@ -88,12 +103,6 @@ const Transactions = () => {
                             >
                                 Edit
                             </Button>
-                            <Button
-                                onClick={(e) => onDelete(e, params.row)}
-                                variant="contained"
-                            >
-                                Delete
-                            </Button>
                         </Box>
                     );
                 }
@@ -103,11 +112,53 @@ const Transactions = () => {
     ];
 
 
+    var APIkey = "c74b84f35c15803fdcc331fcaab1f919";
+    const refresh = async (event) => {
+        setViewData(data);
+        for (var i = 0; i < viewData.transactions.length; i++) {
+            const options = {
+                method: 'GET',
+                url: `https://yahoo-finance15.p.rapidapi.com/api/yahoo/qu/quote/${viewData.transactions[i].name}/financial-data`,
+                headers: {
+                    'X-RapidAPI-Key': 'df57347a7fmsh66ed38f17a8e91fp1d1826jsn2543105cb880',
+                    'X-RapidAPI-Host': 'yahoo-finance15.p.rapidapi.com'
+                }
+            };
+            try {
+                const req = await axios.request(options);
+                edit.transactions[i] = {
+                    ...edit.transactions[i],
+                    curPrice: req.data.financialData.currentPrice.raw * viewData.transactions[i].quantity
+                };
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        setViewData(edit)
+    }
+
     if (!data || isLoading) return "Loading...";
+
     return (
         <Box m="1.5rem 2.5rem">
             <FlexBetween>
-                <Header title="TRANSACTIONS" subtitle="Transactions (USD)" />
+                <Header title="Equity" subtitle="All Equities (USD)" />
+                <Box>
+                    <Button
+                        onClick={refresh}
+                        sx={{
+                            backgroundColor: theme.palette.secondary.light,
+                            color: theme.palette.background.alt,
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            padding: "10px 20px",
+                        }}
+                    >
+                        Refresh
+                    </Button>
+                </Box>
                 <Box>
                     <Button
                         onClick={() => {
@@ -154,11 +205,11 @@ const Transactions = () => {
                 }}
             >
                 <DataGrid
-                    loading={isLoading || !data}
+                    loading={isLoading || !viewData}
                     getRowId={(row) => row._id}
-                    rows={(data && data.transactions) || []}
+                    rows={(viewData && viewData.transactions) || []}
                     columns={columns}
-                    rowCount={(data && data.total) || 0}
+                    rowCount={(viewData && viewData.total) || 0}
                     rowsPerPageOptions={[20, 50, 100]}
                     pagination
                     page={page}
@@ -178,4 +229,4 @@ const Transactions = () => {
     );
 };
 
-export default Transactions;
+export default Equity;

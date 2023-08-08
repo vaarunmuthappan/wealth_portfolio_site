@@ -1,6 +1,6 @@
 import React from "react";
 import { ResponsivePie } from "@nivo/pie";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 
 const BreakdownChart = ({ data, isDashboard = false }) => {
 
@@ -11,19 +11,27 @@ const BreakdownChart = ({ data, isDashboard = false }) => {
     if (!data || isLoading) return "Loading...";
 
     const colors = [
-        theme.palette.secondary[500],
+        theme.palette.secondary[100],
+        theme.palette.secondary[200],
         theme.palette.secondary[300],
-        theme.palette.secondary[300],
+        theme.palette.secondary[400],
         theme.palette.secondary[500],
+        theme.palette.secondary[600],
+        theme.palette.secondary[700],
+        theme.palette.secondary[800],
+        theme.palette.secondary[900],
     ];
     const formattedData = Object.entries(data.Categories).map(
         ([category, amount], i) => ({
             id: category,
             label: category,
-            value: amount,
-            color: colors[i],
+            value: amount / data.Total,
+            color: colors[i % 9],
         })
     );
+    function percentFormat(value) {
+        return `${((value * 100).toFixed(2))} %`;
+    }
 
     return (
         <Box
@@ -77,19 +85,16 @@ const BreakdownChart = ({ data, isDashboard = false }) => {
                     from: "color",
                     modifiers: [["darker", 0.2]],
                 }}
-                enableArcLinkLabels={true}
-                enableArcLabels={false}
+                enableArcLinkLabels={false}
+                enableArcLabels={true}
+                valueFormat={percentFormat}
                 arcLinkLabelsTextColor={theme.palette.secondary[200]}
                 arcLinkLabelsThickness={2}
                 arcLinkLabelsColor={{ from: "color" }}
                 arcLabelsSkipAngle={10}
 
                 tooltip={point => {
-                    point.datum.formattedValue = `${new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'USD',
-                        maximumFractionDigits: 0,
-                    }).format(point.datum.data.value)}`;
+
                     return <div
                         style={{
                             background: 'white',
@@ -97,9 +102,10 @@ const BreakdownChart = ({ data, isDashboard = false }) => {
                             border: '1px solid #ccc',
                         }}
                     >
-                        <div>{point.datum.id}: {point.datum.formattedValue}</div>
+                        <div>{point.datum.id}: {(point.datum.data.value * 100).toFixed(2)} %</div>
                     </div>;
                 }}
+
                 arcLabelsTextColor={{
                     from: "color",
                     modifiers: [["darker", 2]],

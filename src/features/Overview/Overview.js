@@ -21,7 +21,6 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { useSelector } from "react-redux"
 import { selectCurrentToken } from "../auth/authSlice"
-
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import BreakdownChart from "../../components/BreakdownChart";
@@ -67,7 +66,7 @@ const Overview = () => {
             });
             setLiabilityData({
                 Total: response.data.liabTot.sum,
-                Categories: response.data.liabCat
+                Categories: response.data.liabCat,
             });
             setNetUSD(response.data.assetTotal.sum - response.data.liabTot.sum);
             setAssetText(`${new Intl.NumberFormat('en-US', {
@@ -463,6 +462,7 @@ const Overview = () => {
                             Breakdown of liabilities by sub-category.
                         </Typography>
                         <BreakdownChart data={liabilityData} />
+
                     </Box>
                 </Box>
             </div>

@@ -41,6 +41,11 @@ const navItems = [
         url: "transactions",
     },
     {
+        text: "Equities",
+        icon: <ReceiptLongOutlined />,
+        url: "equities",
+    },
+    {
         text: "Breakdown",
         icon: <PieChartOutlined />,
         url: "breakdown",

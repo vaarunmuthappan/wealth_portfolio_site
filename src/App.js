@@ -18,6 +18,7 @@ import AddItem from './features/transactions/addItem';
 import EditItem from './features/transactions/editItem';
 import AddUser from './features/team/addUser';
 import EditUser from './features/team/editUser';
+import Equity from './features/Equity/Equity';
 
 function App() {
   const mode = useSelector((state) => state.admin.mode);
@@ -48,6 +49,10 @@ function App() {
                   <Route index element={<TeamList />} />
                   <Route path="addUser" element={<AddUser />} />
                   <Route path="editUser/:id" element={<EditUser />} />
+                </Route>
+
+                <Route path="/dash/equities">
+                  <Route index element={<Equity />} />
                 </Route>
 
                 <Route path="/dash/breakdown">
