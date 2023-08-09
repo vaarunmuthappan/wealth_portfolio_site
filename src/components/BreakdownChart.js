@@ -11,15 +11,15 @@ const BreakdownChart = ({ data, isDashboard = false }) => {
     if (!data || isLoading) return "Loading...";
 
     const colors = [
-        theme.palette.secondary[100],
-        theme.palette.secondary[200],
-        theme.palette.secondary[300],
-        theme.palette.secondary[400],
-        theme.palette.secondary[500],
-        theme.palette.secondary[600],
-        theme.palette.secondary[700],
-        theme.palette.secondary[800],
-        theme.palette.secondary[900],
+        "#FFEC21",
+        "#378AFF",
+        "#FFA32F",
+        "#F54F52",
+        "#93F03B",
+        "#9552EA",
+        "#003F5C",
+        "#58508D",
+        "#BC5090",
     ];
     const formattedData = Object.entries(data.Categories).map(
         ([category, amount], i) => ({

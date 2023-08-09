@@ -17,7 +17,7 @@ const Equity = () => {
 
     // values to be sent to the backend
     const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(20);
+    const [pageSize, setPageSize] = useState(100000);
     const [sort, setSort] = useState({});
     const [search, setSearch] = useState("");
     const adminStore = store.getState().auth;
@@ -218,8 +218,8 @@ const Equity = () => {
                     getRowId={(row) => row._id}
                     rows={(viewData && viewData.transactions) || []}
                     columns={columns}
-                    rowCount={(viewData && viewData.total) || 0}
-                    rowsPerPageOptions={[20, 50, 100]}
+                    rowCount={(viewData && viewData.transactions.length) || 0}
+                    rowsPerPageOptions={[100000]}
                     pagination
                     page={page}
                     pageSize={pageSize}
