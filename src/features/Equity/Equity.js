@@ -126,7 +126,6 @@ const Equity = () => {
             total: data.total,
             transactions: [...data.transactions]
         }
-        console.log("edit", edit)
         for (var i = 0; i < viewData.transactions.length; i++) {
             const options = {
                 method: 'GET',
@@ -138,7 +137,6 @@ const Equity = () => {
             };
             try {
                 const req = await axios.request(options);
-                console.log(req);
                 edit.transactions[i] = {
                     ...edit.transactions[i],
                     curPrice: req.data.financialData.currentPrice.raw * viewData.transactions[i].quantity
@@ -148,7 +146,6 @@ const Equity = () => {
             }
         }
         setViewData(edit);
-        console.log("edit in", edit);
     }
 
     if (!data || isLoading) return "Loading...";
