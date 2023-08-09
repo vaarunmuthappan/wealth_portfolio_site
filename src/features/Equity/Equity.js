@@ -37,14 +37,22 @@ const Equity = () => {
         search,
     });
 
-    const [viewData, setViewData] = useState({
-        total: 0,
-        transactions: []
+    function sleep(time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+    }
+
+    sleep(1000).then(() => {
     });
+
     var edit = {
-        total: data.total,
-        transactions: [...data.transactions]
+        total: data ? data.total : 0,
+        transactions: data ? [...data.transactions] : []
     };
+
+    const [viewData, setViewData] = useState({
+        total: edit ? edit.total : 0,
+        transactions: edit ? [...edit.transactions] : []
+    });
 
     var columns = [
         {
@@ -111,10 +119,14 @@ const Equity = () => {
         }
     ];
 
-
     var APIkey = "c74b84f35c15803fdcc331fcaab1f919";
     const refresh = async (event) => {
-        setViewData(data);
+
+        edit = {
+            total: data.total,
+            transactions: [...data.transactions]
+        }
+        console.log("edit", edit)
         for (var i = 0; i < viewData.transactions.length; i++) {
             const options = {
                 method: 'GET',
@@ -126,17 +138,17 @@ const Equity = () => {
             };
             try {
                 const req = await axios.request(options);
+                console.log(req);
                 edit.transactions[i] = {
                     ...edit.transactions[i],
                     curPrice: req.data.financialData.currentPrice.raw * viewData.transactions[i].quantity
                 };
-
             } catch (error) {
                 console.error(error);
             }
         }
-
-        setViewData(edit)
+        setViewData(edit);
+        console.log("edit in", edit);
     }
 
     if (!data || isLoading) return "Loading...";
